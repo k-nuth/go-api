@@ -39,7 +39,7 @@ import (
 	"time" // or "runtime"
 	"unsafe"
 
-	"github.com/fpelliccioni/bitprim"
+	"github.com/bitprim/bitprim-go/bitprim"
 )
 
 func reverseHash(h bitprim.HashT) bitprim.HashT {
