@@ -104,6 +104,11 @@ func ExecutorRun(exec unsafe.Pointer) int {
 	return int(res)
 }
 
+func ExecutorRunAndWait(exec unsafe.Pointer) int {
+	ptr := (*C.struct_executor)(exec)
+	res := C.executor_run_wait(ptr)
+	return int(res)
+}
 func ExecutorInitchain(exec unsafe.Pointer) int {
 	ptr := (*C.struct_executor)(exec)
 	res := C.executor_initchain(ptr)

@@ -34,12 +34,6 @@ type Executor struct {
 	native_ptr unsafe.Pointer
 }
 
-// func NewExecutorWithStd(path string, sin_fd int, sout_fd int, serr_fd int) *Executor {
-// 	x := new(Executor)
-// 	x.native_ptr = ExecutorConstruct(path, sin_fd, sout_fd, serr_fd)
-// 	return x
-// }
-
 func NewExecutor(path string) *Executor {
 	return NewExecutorWithStd(path, syscall.Stdin, syscall.Stdout, syscall.Stderr)
 }
@@ -51,6 +45,10 @@ func (x *Executor) Close() {
 
 func (x Executor) Run() int {
 	return ExecutorRun(x.native_ptr)
+}
+
+func (x Executor) RunAndWait() int {
+	return ExecutorRunAndWait(x.native_ptr)
 }
 
 func (x Executor) Initchain() int {

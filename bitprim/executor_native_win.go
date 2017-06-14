@@ -42,23 +42,15 @@ import (
 )
 
 func ExecutorConstruct(path string, sin syscall.Handle, sout syscall.Handle, serr syscall.Handle) unsafe.Pointer {
-	fmt.Println("ExecutorConstruct 1")
 	path_c := C.CString(path)
-	fmt.Println("ExecutorConstruct 2")
 	defer C.free(unsafe.Pointer(path_c))
-	fmt.Println("ExecutorConstruct 3")
-
-	// xxx := int(C.fileno((*C.FILE)(unsafe.Pointer(sin))))
-	// fmt.Printf("xxx = %d.\n", xxx)
 
 	exec := C.executor_construct_handles(path_c,
 		unsafe.Pointer(sin),
 		unsafe.Pointer(sout),
 		unsafe.Pointer(serr))
 
-	fmt.Println("ExecutorConstruct 4")
 	fmt.Printf("exec address = %p.\n", unsafe.Pointer(exec))
-	fmt.Println("ExecutorConstruct 5")
 	return unsafe.Pointer(exec)
 }
 

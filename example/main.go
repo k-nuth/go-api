@@ -23,7 +23,7 @@ export GOPATH=$(go env GOPATH)
 export GODEBUG=cgocheck=0
 
 export LD_LIBRARY_PATH=/home/fernando/dev/bitprim/bitprim-node-cint/cmake-build-debug:$LD_LIBRARY_PATH
-go install github.com/fpelliccioni/bitprim_test
+go install github.com/bitprim/bitprim-go/example
 $GOPATH/bin/bitprim_test
 
 cd C:\Users\Fernando\go\bin
@@ -172,6 +172,7 @@ func main() {
 	// return
 
 	res := e.Run()
+	// res := e.RunAndWait()
 
 	if res == 0 {
 		e.Close()
