@@ -37,7 +37,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time" // or "runtime"
-	"unsafe"
 
 	"github.com/bitprim/bitprim-go/bitprim"
 )
@@ -63,7 +62,7 @@ func doSomeQueries(e *bitprim.Executor) {
 	// fmt.Println(tx_hash)
 
 	// tx := e.FetchTransaction(tx_hash, false)
-	// fmt.Printf("tx.native_ptr: %p\n", tx.native_ptr)
+	// fmt.Printf("tx.ptr: %p\n", tx.ptr)
 	// fmt.Printf("tx.height:     %d\n", tx.height)
 	// fmt.Printf("tx.index:      %d\n", tx.index)
 	// fmt.Printf("tx.IsValid():  %t\n", tx.IsValid())
@@ -75,7 +74,7 @@ func doSomeQueries(e *bitprim.Executor) {
 	// head := e.FetchBlockHeader(1500)
 	// defer head.Close()
 
-	// fmt.Printf("head.native_ptr: %p\n", head.native_ptr)
+	// fmt.Printf("head.ptr: %p\n", head.ptr)
 	// fmt.Printf("head.height:        %d\n", head.height)
 	// fmt.Printf("head.IsValid():     %t\n", head.IsValid())
 	// fmt.Printf("head.Version():     %d\n", head.Version())
@@ -88,7 +87,7 @@ func doSomeQueries(e *bitprim.Executor) {
 
 	// prev := e.FetchBlockHeaderByHash(head.PreviousBlockHash())
 	// defer prev.Close()
-	// fmt.Printf("prev.native_ptr: %p\n", prev.native_ptr)
+	// fmt.Printf("prev.ptr: %p\n", prev.ptr)
 	// fmt.Printf("prev.height:        %d\n", prev.height)
 	// fmt.Printf("prev.IsValid():     %t\n", prev.IsValid())
 	// fmt.Printf("prev.Version():     %d\n", prev.Version())
@@ -99,26 +98,28 @@ func doSomeQueries(e *bitprim.Executor) {
 	// fmt.Println("prev.Merkle():           ", prev.Merkle())
 	// fmt.Println("prev.Hash():             ", prev.Hash())
 
-	// -------------------------------------
+	// --------------------------------------------------------------------
 
-	block := e.FetchBlock(100000)
-	defer block.Close()
+	// block := e.FetchBlock(100000)
+	// defer block.Close()
 
-	for index, tx := range block.Transactions() {
-		fmt.Println("index:             ", index)
-		fmt.Println("tx.Hash():         ", tx.Hash())
-		fmt.Println("len(tx.Outputs()): ", len(tx.Outputs()))
-		fmt.Println("len(tx.Inputs()):  ", len(tx.Inputs()))
-	}
+	// for index, tx := range block.Transactions() {
+	// 	fmt.Println("index:             ", index)
+	// 	fmt.Println("tx.Hash():         ", tx.Hash())
+	// 	fmt.Println("len(tx.Outputs()): ", len(tx.Outputs()))
+	// 	fmt.Println("len(tx.Inputs()):  ", len(tx.Inputs()))
+	// }
 
-	// fmt.Printf("block.native_ptr: %p\n", block.native_ptr)
+	// --------------------------------------------------------------------
+
+	// fmt.Printf("block.ptr: %p\n", block.ptr)
 	// fmt.Printf("block.height:        %d\n", block.height)
 	// fmt.Printf("block.IsValid():     %t\n", block.IsValid())
 	// fmt.Println("block.Hash():             ", block.Hash())
 
-	// fmt.Println("blockTransactionCount(block):   ", blockTransactionCount(block.native_ptr))
+	// fmt.Println("blockTransactionCount(block):   ", blockTransactionCount(block.ptr))
 
-	// ptr, n := blockTransactions(block.native_ptr)
+	// ptr, n := blockTransactions(block.ptr)
 	// fmt.Println("blockTransactions(block) ptr: ", ptr)
 	// fmt.Println("blockTransactions(block) n:   ", n)
 
@@ -138,26 +139,6 @@ func main() {
 
 	//TODO: Fer: ver donde ubicamos todos estos channels.
 	//TODO: Fer: consular con expertos en Golang a ver si es la forma correcta de pasar de un esquema asincronico a uno sincronico
-	// ----------------------------------------------------------
-
-	bitprim.FetchLastHeightChannel = make(chan int)
-	bitprim.FetchBlockHeightChannel = make(chan int)
-
-	bitprim.FetchBlockHeaderChannel1 = make(chan unsafe.Pointer)
-	bitprim.FetchBlockHeaderChannel2 = make(chan int)
-	bitprim.FetchBlockHeaderByHashChannel1 = make(chan unsafe.Pointer)
-	bitprim.FetchBlockHeaderByHashChannel2 = make(chan int)
-
-	bitprim.FetchBlockChannel1 = make(chan unsafe.Pointer)
-	bitprim.FetchBlockChannel2 = make(chan int)
-	bitprim.FetchBlockByHashChannel1 = make(chan unsafe.Pointer)
-	bitprim.FetchBlockByHashChannel2 = make(chan int)
-
-	bitprim.FetchTransactionChannel1 = make(chan unsafe.Pointer)
-	bitprim.FetchTransactionChannel2 = make(chan int)
-
-	bitprim.FetchOutputChannel = make(chan unsafe.Pointer)
-
 	// ----------------------------------------------------------
 
 	fmt.Println("before NewExecutor")
@@ -218,7 +199,8 @@ func main() {
 	for {
 		// fmt.Println("running: ", running)
 		if running {
-			height := e.FetchLastHeight()
+			_, cheight := e.GetLastHeightAsync()
+			height := <-cheight
 
 			if height >= 100000 {
 				doSomeQueries(e)

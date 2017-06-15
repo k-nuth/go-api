@@ -27,7 +27,7 @@ package bitprim
 
 /*
 #cgo CFLAGS: -IC:/development/bitprim/bitprim-node-cint/include -IC:/development/bitprim/bitprim-core/include
-#cgo LDFLAGS: -LC:/development/bitprim/bitprim-node-cint/cmake-build-debug -lbitprim-node-cint
+#cgo LDFLAGS: -LC:/development/bitprim/bitprim-node-cint/cmake-build-release -lbitprim-node-cint
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -56,6 +56,6 @@ func ExecutorConstruct(path string, sin syscall.Handle, sout syscall.Handle, ser
 
 func NewExecutorWithStd(path string, sin_fd syscall.Handle, sout_fd syscall.Handle, serr_fd syscall.Handle) *Executor {
 	x := new(Executor)
-	x.native_ptr = ExecutorConstruct(path, sin_fd, sout_fd, serr_fd)
+	x.ptr = ExecutorConstruct(path, sin_fd, sout_fd, serr_fd)
 	return x
 }

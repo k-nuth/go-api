@@ -24,53 +24,53 @@ package bitprim
 /*
 #include <stdio.h>
 
-void fetchLastHeightGoCallBack_cgo(int error, size_t height) {
-	// printf("C.fetchLastHeightGoCallBack_cgo(): height = %lu\n", height);
-	void FetchLastHeightGoCallBack(int, size_t);
-	FetchLastHeightGoCallBack(error, height);
-}
+// void fetchLastHeightGoCallBack_cgo(int error, size_t height) {
+// 	// printf("C.fetchLastHeightGoCallBack_cgo(): height = %lu\n", height);
+// 	void FetchLastHeightGoCallBack(int, size_t);
+// 	FetchLastHeightGoCallBack(error, height);
+// }
 
-void fetchBlockHeightGoCallBack_cgo(int error, size_t height) {
-	// printf("C.fetchBlockHeightGoCallBack_cgo(): height = %lu\n", height);
-	void FetchBlockHeightGoCallBack(int, size_t);
-	FetchBlockHeightGoCallBack(error, height);
-}
+// void fetchBlockHeightGoCallBack_cgo(int error, size_t height) {
+// 	// printf("C.fetchBlockHeightGoCallBack_cgo(): height = %lu\n", height);
+// 	void FetchBlockHeightGoCallBack(int, size_t);
+// 	FetchBlockHeightGoCallBack(error, height);
+// }
 
-void fetchBlockHeaderGoCallBack_cgo(int error, void* header, size_t height) {
-	// printf("C.fetchBlockHeaderGoCallBack_cgo(): header = ?, height = %lu\n", height);
-	void FetchBlockHeaderGoCallBack(int, void*, int);
-	FetchBlockHeaderGoCallBack(error, header, height);
-}
+// void fetchBlockHeaderGoCallBack_cgo(int error, void* header, size_t height) {
+// 	// printf("C.fetchBlockHeaderGoCallBack_cgo(): header = ?, height = %lu\n", height);
+// 	void FetchBlockHeaderGoCallBack(int, void*, int);
+// 	FetchBlockHeaderGoCallBack(error, header, height);
+// }
 
-void fetchBlockHeaderByHashGoCallBack_cgo(int error, void* header, size_t height) {
-	// printf("C.fetchBlockHeaderByHashGoCallBack_cgo(): header = ?, height = %lu\n", height);
-	void FetchBlockHeaderByHashGoCallBack(int, void*, int);
-	FetchBlockHeaderByHashGoCallBack(error, header, height);
-}
+// void fetchBlockHeaderByHashGoCallBack_cgo(int error, void* header, size_t height) {
+// 	// printf("C.fetchBlockHeaderByHashGoCallBack_cgo(): header = ?, height = %lu\n", height);
+// 	void FetchBlockHeaderByHashGoCallBack(int, void*, int);
+// 	FetchBlockHeaderByHashGoCallBack(error, header, height);
+// }
 
-void fetchBlockGoCallBack_cgo(int error, void* block, size_t height) {
-	// printf("C.fetchBlockGoCallBack_cgo(): block = ?, height = %lu\n", height);
-	void FetchBlockGoCallBack(int, void*, int);
-	FetchBlockGoCallBack(error, block, height);
-}
+// void fetchBlockGoCallBack_cgo(int error, void* block, size_t height) {
+// 	// printf("C.fetchBlockGoCallBack_cgo(): block = ?, height = %lu\n", height);
+// 	void FetchBlockGoCallBack(int, void*, int);
+// 	FetchBlockGoCallBack(error, block, height);
+// }
 
-void fetchBlockByHashGoCallBack_cgo(int error, void* block, size_t height) {
-	// printf("C.fetchBlockByHashGoCallBack_cgo(): block = ?, height = %lu\n", height);
-	void FetchBlockByHashGoCallBack(int, void*, int);
-	FetchBlockByHashGoCallBack(error, block, height);
-}
+// void fetchBlockByHashGoCallBack_cgo(int error, void* block, size_t height) {
+// 	// printf("C.fetchBlockByHashGoCallBack_cgo(): block = ?, height = %lu\n", height);
+// 	void FetchBlockByHashGoCallBack(int, void*, int);
+// 	FetchBlockByHashGoCallBack(error, block, height);
+// }
 
-void fetchTransactionGoCallBack_cgo(int error, void* transaction, size_t height, size_t index) {
-	// printf("C.fetchTransactionGoCallBack_cgo(): transaction = ?, height = %lu, index = %lu\n", height, index);
-	void FetchTransactionGoCallBack(int, void*, int, int);
-	FetchTransactionGoCallBack(error, transaction, height, index);
-}
+// void fetchTransactionGoCallBack_cgo(int error, void* transaction, size_t height, size_t index) {
+// 	// printf("C.fetchTransactionGoCallBack_cgo(): transaction = ?, height = %lu, index = %lu\n", height, index);
+// 	void FetchTransactionGoCallBack(int, void*, int, int);
+// 	FetchTransactionGoCallBack(error, transaction, height, index);
+// }
 
-void fetchOutputGoCallBack_cgo(int error, void* output) {
-	// printf("C.fetchTransactionGoCallBack_cgo(): output = ?\n");
-	void FetchOutputGoCallBack(int, void*);
-	FetchOutputGoCallBack(error, output);
-}
+// void fetchOutputGoCallBack_cgo(int error, void* output) {
+// 	// printf("C.fetchTransactionGoCallBack_cgo(): output = ?\n");
+// 	void FetchOutputGoCallBack(int, void*);
+// 	FetchOutputGoCallBack(error, output);
+// }
 
 */
 import "C"

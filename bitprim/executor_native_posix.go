@@ -45,6 +45,6 @@ func ExecutorConstruct(path string, sin_fd int, sout_fd int, serr_fd int) unsafe
 
 func NewExecutorWithStd(path string, sin_fd int, sout_fd int, serr_fd int) *Executor {
 	x := new(Executor)
-	x.native_ptr = ExecutorConstruct(path, sin_fd, sout_fd, serr_fd)
+	x.ptr = ExecutorConstruct(path, sin_fd, sout_fd, serr_fd)
 	return x
 }

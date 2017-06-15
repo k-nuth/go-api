@@ -56,40 +56,134 @@ func (x Executor) Initchain() int {
 	return ExecutorInitchain(x.ptr)
 }
 
-func (x Executor) FetchLastHeight() int {
-	return FetchLastHeight(x.ptr)
+func (x Executor) GetLastHeight() (int, int) {
+	return GetLastHeight(x.ptr)
 }
 
-func (x Executor) FetchBlockHeight(hash HashT) int {
-	return FetchBlockHeight(x.ptr, hash)
+func (x Executor) GetLastHeightAsync() (chan int, chan int) {
+	ce := make(chan int)
+	ch := make(chan int)
+	go func() {
+		te, th := x.GetLastHeight()
+		ce <- te
+		ch <- th
+	}()
+	return ce, ch
 }
 
-func (x Executor) FetchBlockHeader(height int) *Header {
-	res := NewHeader(FetchBlockHeader(x.ptr, height))
+func (x Executor) GetBlockHeight(hash HashT) (int, int) {
+	return GetBlockHeight(x.ptr, hash)
+}
+
+func (x Executor) GetBlockHeightAsync(hash HashT) (chan int, chan int) {
+	ce := make(chan int)
+	ch := make(chan int)
+	go func() {
+		te, th := x.GetBlockHeight(hash)
+		ce <- te
+		ch <- th
+	}()
+	return ce, ch
+}
+
+//TODO: Error management!
+func (x Executor) GetBlockHeader(height int) *Header {
+	_, ptr, h := GetBlockHeader(x.ptr, height)
+	res := NewHeader(ptr, h)
 	return res
 }
 
-func (x Executor) FetchBlockHeaderByHash(hash HashT) *Header {
-	res := NewHeader(FetchBlockHeaderByHash(x.ptr, hash))
+//TODO: Error management!
+func (x Executor) GetBlockHeaderAsync(height int) chan *Header {
+	ch := make(chan *Header)
+	go func() {
+		th := x.GetBlockHeader(height)
+		ch <- th
+	}()
+	return ch
+}
+
+//TODO: Error management!
+func (x Executor) GetBlockHeaderByHash(hash HashT) *Header {
+	_, ptr, h := GetBlockHeaderByHash(x.ptr, hash)
+	res := NewHeader(ptr, h)
 	return res
 }
 
-func (x Executor) FetchBlock(height int) *Block {
-	res := NewBlock(FetchBlock(x.ptr, height))
+//TODO: Error management!
+func (x Executor) GetBlockHeaderByHashAsync(hash HashT) chan *Header {
+	ch := make(chan *Header)
+	go func() {
+		th := x.GetBlockHeaderByHash(hash)
+		ch <- th
+	}()
+	return ch
+}
+
+//TODO: Error management!
+func (x Executor) GetBlock(height int) *Block {
+	_, ptr, h := GetBlock(x.ptr, height)
+	res := NewBlock(ptr, h)
 	return res
 }
 
-func (x Executor) FetchBlockByHash(hash HashT) *Block {
-	res := NewBlock(FetchBlockByHash(x.ptr, hash))
+//TODO: Error management!
+func (x Executor) GetBlockAsync(height int) chan *Block {
+	ch := make(chan *Block)
+	go func() {
+		th := x.GetBlock(height)
+		ch <- th
+	}()
+	return ch
+}
+
+//TODO: Error management!
+func (x Executor) GetBlockByHash(hash HashT) *Block {
+	_, ptr, h := GetBlockByHash(x.ptr, hash)
+	res := NewBlock(ptr, h)
 	return res
 }
 
-func (x Executor) FetchTransaction(hash HashT, requiredConfirmed bool) *Transaction {
-	res := NewTransaction(FetchTransaction(x.ptr, hash, requiredConfirmed))
+//TODO: Error management!
+func (x Executor) GetBlockByHashAsync(hash HashT) chan *Block {
+	ch := make(chan *Block)
+	go func() {
+		th := x.GetBlockByHash(hash)
+		ch <- th
+	}()
+	return ch
+}
+
+//TODO: Error management!
+func (x Executor) GetTransaction(hash HashT, requiredConfirmed bool) *Transaction {
+	_, ptr, h, i := GetTransaction(x.ptr, hash, requiredConfirmed)
+	res := NewTransaction(ptr, h, i)
 	return res
 }
 
-func (x Executor) FetchOutput(hash HashT, index int, requiredConfirmed bool) *Output {
-	res := NewOutput(FetchOutput(x.ptr, hash, index, requiredConfirmed))
+//TODO: Error management!
+func (x Executor) GetTransactionAsync(hash HashT, requiredConfirmed bool) chan *Transaction {
+	ch := make(chan *Transaction)
+	go func() {
+		th := x.GetTransaction(hash, requiredConfirmed)
+		ch <- th
+	}()
+	return ch
+}
+
+//TODO: Error management!
+func (x Executor) GetOutput(hash HashT, index int, requiredConfirmed bool) *Output {
+	_, ptr := GetOutput(x.ptr, hash, index, requiredConfirmed)
+	res := NewOutput(ptr)
 	return res
+}
+
+//TODO: Error management!
+func (x Executor) GetOutputAsync(hash HashT, index int, requiredConfirmed bool) chan *Output {
+	ch := make(chan *Output)
+	go func() {
+		th := x.GetOutput(hash, index, requiredConfirmed)
+		ch <- th
+	}()
+	return ch
 }

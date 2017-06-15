@@ -29,20 +29,20 @@ import (
 )
 
 type Block struct {
-	native_ptr   unsafe.Pointer
+	ptr          unsafe.Pointer
 	height       int
 	transactions []Transaction
 }
 
-func NewBlock(native_ptr unsafe.Pointer, height int) *Block {
+func NewBlock(ptr unsafe.Pointer, height int) *Block {
 	x := new(Block)
-	x.native_ptr = native_ptr
+	x.ptr = ptr
 	x.height = height
 
-	n := blockTransactionCount(native_ptr)
+	n := blockTransactionCount(ptr)
 	i := 0
 	for i != n {
-		ptr := blockTransactionNth(native_ptr, i)
+		ptr := blockTransactionNth(ptr, i)
 		tx := NewTransaction(ptr, height, i)
 		x.transactions = append(x.transactions, *tx)
 		i++
@@ -51,21 +51,21 @@ func NewBlock(native_ptr unsafe.Pointer, height int) *Block {
 }
 
 func (x *Block) Close() {
-	fmt.Printf("Go.Block.Close() - native_ptr: %p\n", x.native_ptr)
-	blockDestruct(x.native_ptr)
-	x.native_ptr = nil
+	fmt.Printf("Go.Block.Close() - ptr: %p\n", x.ptr)
+	blockDestruct(x.ptr)
+	x.ptr = nil
 }
 
 func (x Block) IsValid() bool {
-	return blockIsValid(x.native_ptr)
+	return blockIsValid(x.ptr)
 }
 
 func (x Block) Hash() HashT {
-	return blockHash(x.native_ptr)
+	return blockHash(x.ptr)
 }
 
 func (x Block) Header() *Header {
-	return NewHeader(blockHeader(x.native_ptr), x.height)
+	return NewHeader(blockHeader(x.ptr), x.height)
 }
 
 func (x Block) Transactions() []Transaction {
@@ -75,7 +75,7 @@ func (x Block) Transactions() []Transaction {
 }
 
 func (x Block) SerializedSize(version uint32) uint64 /*size_t*/ {
-	return blockSerializedSize(x.native_ptr, version)
+	return blockSerializedSize(x.ptr, version)
 }
 
 /*static*/
@@ -84,57 +84,57 @@ func (x Block) Subsidy(height uint64 /*size_t*/) uint64 {
 }
 
 func (x Block) Fees(block unsafe.Pointer) uint64 {
-	return blockFees(x.native_ptr)
+	return blockFees(x.ptr)
 }
 
 func (x Block) Claim(block unsafe.Pointer) uint64 {
-	return blockClaim(x.native_ptr)
+	return blockClaim(x.ptr)
 }
 
 func (x Block) Reward(height uint64) uint64 {
-	return blockReward(x.native_ptr, height)
+	return blockReward(x.ptr, height)
 }
 
 func (x Block) GenerateMerkleRoot(block unsafe.Pointer) HashT {
-	return blockGenerateMerkleRoot(x.native_ptr)
+	return blockGenerateMerkleRoot(x.ptr)
 }
 
 func (x Block) SignatureOperations() uint64 /*size_t*/ {
-	return blockSignatureOperations(x.native_ptr)
+	return blockSignatureOperations(x.ptr)
 }
 
 func (x Block) SignatureOperationsBip16Active(bip16_active bool) uint64 /*size_t*/ {
-	return blockSignatureOperationsBip16Active(x.native_ptr, bip16_active)
+	return blockSignatureOperationsBip16Active(x.ptr, bip16_active)
 }
 
 func (x Block) TotalInputs(with_coinbase bool) uint64 /*size_t*/ {
-	return blockTotalInputs(x.native_ptr, with_coinbase)
+	return blockTotalInputs(x.ptr, with_coinbase)
 }
 
 func (x Block) IsExtraCoinbases(block unsafe.Pointer) bool {
-	return blockIsExtraCoinbases(x.native_ptr)
+	return blockIsExtraCoinbases(x.ptr)
 }
 
 func (x Block) IsFinal(height uint64 /*size_t*/) bool {
-	return blockIsFinal(x.native_ptr, height)
+	return blockIsFinal(x.ptr, height)
 }
 
 func (x Block) IsDistinctTransactionSet(block unsafe.Pointer) bool {
-	return blockIsDistinctTransactionSet(x.native_ptr)
+	return blockIsDistinctTransactionSet(x.ptr)
 }
 
 func (x Block) IsValidCoinbaseClaim(height uint64 /*size_t*/) bool {
-	return blockIsValidCoinbaseClaim(x.native_ptr, height)
+	return blockIsValidCoinbaseClaim(x.ptr, height)
 }
 
 func (x Block) IsValidCoinbaseScript(height uint64 /*size_t*/) bool {
-	return blockIsValidCoinbaseScript(x.native_ptr, height)
+	return blockIsValidCoinbaseScript(x.ptr, height)
 }
 
 func (x Block) IsInternalDoubleSpend(block unsafe.Pointer) bool {
-	return blockIsInternalDoubleSpend(x.native_ptr)
+	return blockIsInternalDoubleSpend(x.ptr)
 }
 
 func (x Block) IsValidMerkleRoot(block unsafe.Pointer) bool {
-	return blockIsValidMerkleRoot(x.native_ptr)
+	return blockIsValidMerkleRoot(x.ptr)
 }
