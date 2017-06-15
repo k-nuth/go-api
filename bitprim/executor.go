@@ -30,8 +30,9 @@ import (
 	"unsafe"
 )
 
+//Executor structure
 type Executor struct {
-	native_ptr unsafe.Pointer
+	ptr unsafe.Pointer
 }
 
 func NewExecutor(path string) *Executor {
@@ -39,56 +40,56 @@ func NewExecutor(path string) *Executor {
 }
 
 func (x *Executor) Close() {
-	ExecutorDestruct(x.native_ptr)
-	x.native_ptr = nil
+	ExecutorDestruct(x.ptr)
+	x.ptr = nil
 }
 
 func (x Executor) Run() int {
-	return ExecutorRun(x.native_ptr)
+	return ExecutorRun(x.ptr)
 }
 
 func (x Executor) RunAndWait() int {
-	return ExecutorRunAndWait(x.native_ptr)
+	return ExecutorRunAndWait(x.ptr)
 }
 
 func (x Executor) Initchain() int {
-	return ExecutorInitchain(x.native_ptr)
+	return ExecutorInitchain(x.ptr)
 }
 
 func (x Executor) FetchLastHeight() int {
-	return FetchLastHeight(x.native_ptr)
+	return FetchLastHeight(x.ptr)
 }
 
 func (x Executor) FetchBlockHeight(hash HashT) int {
-	return FetchBlockHeight(x.native_ptr, hash)
+	return FetchBlockHeight(x.ptr, hash)
 }
 
 func (x Executor) FetchBlockHeader(height int) *Header {
-	res := NewHeader(FetchBlockHeader(x.native_ptr, height))
+	res := NewHeader(FetchBlockHeader(x.ptr, height))
 	return res
 }
 
 func (x Executor) FetchBlockHeaderByHash(hash HashT) *Header {
-	res := NewHeader(FetchBlockHeaderByHash(x.native_ptr, hash))
+	res := NewHeader(FetchBlockHeaderByHash(x.ptr, hash))
 	return res
 }
 
 func (x Executor) FetchBlock(height int) *Block {
-	res := NewBlock(FetchBlock(x.native_ptr, height))
+	res := NewBlock(FetchBlock(x.ptr, height))
 	return res
 }
 
 func (x Executor) FetchBlockByHash(hash HashT) *Block {
-	res := NewBlock(FetchBlockByHash(x.native_ptr, hash))
+	res := NewBlock(FetchBlockByHash(x.ptr, hash))
 	return res
 }
 
 func (x Executor) FetchTransaction(hash HashT, requiredConfirmed bool) *Transaction {
-	res := NewTransaction(FetchTransaction(x.native_ptr, hash, requiredConfirmed))
+	res := NewTransaction(FetchTransaction(x.ptr, hash, requiredConfirmed))
 	return res
 }
 
 func (x Executor) FetchOutput(hash HashT, index int, requiredConfirmed bool) *Output {
-	res := NewOutput(FetchOutput(x.native_ptr, hash, index, requiredConfirmed))
+	res := NewOutput(FetchOutput(x.ptr, hash, index, requiredConfirmed))
 	return res
 }
