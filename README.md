@@ -1,1 +1,1 @@
-# Bitcoin Full-Node Library written in Go Language
+# Bitcoin/Litecoin Full-Node Library written in Go Language
