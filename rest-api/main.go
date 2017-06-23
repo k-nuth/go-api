@@ -72,6 +72,58 @@ func startHttpServer(e *bitprim.Executor) *http.Server {
 		fmt.Fprintf(w, "Last Height: %d\n", height)
 	})
 
+	// http://127.0.0.1:8080/history/1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+
+	router.HandleFunc("/history/{paymentAddress}", func(w http.ResponseWriter, r *http.Request) {
+
+		vars := mux.Vars(r)
+		paymentAddress := vars["paymentAddress"]
+		fmt.Fprintln(w, "history:", paymentAddress)
+		fmt.Println("history:", paymentAddress)
+
+		list := e.GetHistory(paymentAddress, 0, 0)
+
+		count := list.Count()
+
+		for n := 0; n < count; n++ {
+			h := list.Nth(n)
+
+			fmt.Fprintln(w, "n:                    ", n)
+			fmt.Fprintln(w, "h.PointKind():        ", h.PointKind())
+			fmt.Fprintln(w, "h.Height():           ", h.Height())
+			fmt.Fprintln(w, "h.ValueOrSpend():     ", h.ValueOrSpend())
+
+			fmt.Fprintln(w, "h.Point().Hash():     ", h.Point().Hash())
+			fmt.Fprintln(w, "h.Point().IsValid():  ", h.Point().IsValid())
+			fmt.Fprintln(w, "h.Point().Index():    ", h.Point().Index())
+			fmt.Fprintln(w, "h.Point().Checksum(): ", h.Point().Checksum())
+		}
+	})
+
+	// // if height >= 262421 { // Juan
+	// if height >= 123723 { // Satoshi
+
+	// 	// list := e.GetHistory("1MLVpZC2CTFHheox8SCEnAbW5NBdewRTdR", 0, 0) //Juan
+	// 	list := e.GetHistory("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", 0, 0) //Satoshi
+
+	// 	count := list.Count()
+
+	// 	for n := 0; n < count; n++ {
+	// 		h := list.Nth(n)
+
+	// 		fmt.Println("h.PointKind():        ", h.PointKind())
+	// 		fmt.Println("h.Height():           ", h.Height())
+	// 		fmt.Println("h.ValueOrSpend():     ", h.ValueOrSpend())
+
+	// 		fmt.Println("h.Point().Hash():     ", h.Point().Hash())
+	// 		fmt.Println("h.Point().IsValid():  ", h.Point().IsValid())
+	// 		fmt.Println("h.Point().Index():    ", h.Point().Index())
+	// 		fmt.Println("h.Point().Checksum(): ", h.Point().Checksum())
+	// 	}
+	// } else {
+	// 	fmt.Printf("FetchLastHeight: %d\n", height)
+	// }
+
 	srv := &http.Server{Addr: ":8080", Handler: router}
 
 	go func() {
@@ -136,10 +188,11 @@ func main() {
 
 	fmt.Println("closing...")
 
+	e.Close()
+
 	if err := srv.Shutdown(nil); err != nil {
 		panic(err) // failure/timeout shutting down the server gracefully
 	}
-	e.Close()
 
 	fmt.Println("exiting...")
 }
