@@ -39,7 +39,7 @@ package bitprim
 import "C"
 
 import (
-	"fmt" // or "runtime"
+	// or "runtime"
 	"syscall"
 	"unsafe"
 )
@@ -52,7 +52,7 @@ func ExecutorConstruct(path string, sout syscall.Handle, serr syscall.Handle) un
 		unsafe.Pointer(sout),
 		unsafe.Pointer(serr))
 
-	fmt.Printf("exec address = %p.\n", unsafe.Pointer(exec))
+	// fmt.Printf("exec address = %p.\n", unsafe.Pointer(exec))
 	return unsafe.Pointer(exec)
 }
 

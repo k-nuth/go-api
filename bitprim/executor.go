@@ -167,6 +167,7 @@ func (x Executor) GetTransactionAsync(hash HashT, requiredConfirmed bool) chan *
 	return ch
 }
 
+// ----------------------------------------------------------
 //TODO: Error management!
 func (x Executor) GetOutput(hash HashT, index int, requiredConfirmed bool) *Output {
 	_, ptr := GetOutput(x.ptr, hash, index, requiredConfirmed)
@@ -182,4 +183,13 @@ func (x Executor) GetOutputAsync(hash HashT, index int, requiredConfirmed bool) 
 		ch <- th
 	}()
 	return ch
+}
+
+// ----------------------------------------------------------
+// func getHistory(exec unsafe.Pointer, address string, limit int, fromHeight int) (int, unsafe.Pointer) {
+
+func (x Executor) GetHistory(address string, limit int, fromHeight int) *HistoryCompactList {
+	_, ptr := getHistory(x.ptr, address, limit, fromHeight)
+	res := NewHistoryCompactList(ptr)
+	return res
 }

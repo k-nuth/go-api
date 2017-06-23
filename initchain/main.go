@@ -1,5 +1,3 @@
-// +build linux
-
 /**
  * Copyright (c) 2017 Bitprim developers (see AUTHORS)
  *
@@ -19,31 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// --------------------------------
-// Interface one-to-one with C Interface
-// --------------------------------
+/*
+export PATH=$PATH:$(/usr/lib/go-1.8/bin/go env GOROOT)/bin
+export GOPATH=$(go env GOPATH)
+export GODEBUG=cgocheck=0
 
-package bitprim
+export LD_LIBRARY_PATH=/home/fernando/dev/bitprim/bitprim-node-cint/cmake-build-debug:$LD_LIBRARY_PATH
+go install github.com/bitprim/bitprim-go/initchain
+go get github.com/bitprim/bitprim-go/initchain
+$GOPATH/bin/bitprim_test
 
-// --------------------------------------------------------------------------------
+cd C:\Users\Fernando\go\bin
+*/
+
+package main
 
 import (
-	"C" // or "runtime"
-	"unsafe"
+	// or "runtime"
+	"github.com/bitprim/bitprim-go/bitprim"
 )
 
-func ExecutorConstruct(path string, sout_fd int, serr_fd int) unsafe.Pointer {
-	path_c := C.CString(path)
-	defer C.free(unsafe.Pointer(path_c))
+func main() {
+	e := bitprim.NewExecutor("/pepe")
+	//defer e.Close()
 
-	exec := C.executor_construct_fd(path_c, C.int(sout_fd), C.int(serr_fd))
-	// fmt.Printf("exec address = %p.\n", unsafe.Pointer(exec))
-	return unsafe.Pointer(exec)
+	// fmt.Println("before RUN")
 
-}
-
-func NewExecutorWithStd(path string, sout_fd int, serr_fd int) *Executor {
-	x := new(Executor)
-	x.ptr = ExecutorConstruct(path, sout_fd, serr_fd)
-	return x
+	res := e.Initchain()
+	// fmt.Printf("%d\n", res)
+	e.Close()
 }

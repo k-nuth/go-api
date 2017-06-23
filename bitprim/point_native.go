@@ -1,5 +1,3 @@
-// +build linux
-
 /**
  * Copyright (c) 2017 Bitprim developers (see AUTHORS)
  *
@@ -19,31 +17,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// --------------------------------
-// Interface one-to-one with C Interface
-// --------------------------------
-
 package bitprim
 
-// --------------------------------------------------------------------------------
+// #include <bitprim/nodecint/point.h>
+import "C"
 
 import (
-	"C" // or "runtime"
 	"unsafe"
 )
 
-func ExecutorConstruct(path string, sout_fd int, serr_fd int) unsafe.Pointer {
-	path_c := C.CString(path)
-	defer C.free(unsafe.Pointer(path_c))
+// hash_t point_get_hash(point_t point);
+// int /*bool*/ point_is_valid(point_t point);
+// uint32_t point_get_index(point_t point);
+// uint64_t point_get_checksum(point_t point);
 
-	exec := C.executor_construct_fd(path_c, C.int(sout_fd), C.int(serr_fd))
-	// fmt.Printf("exec address = %p.\n", unsafe.Pointer(exec))
-	return unsafe.Pointer(exec)
-
+func pointHash(point unsafe.Pointer) HashT {
+	ptr := (C.point_t)(point)
+	return CHashToGo(C.point_get_hash(ptr))
 }
 
-func NewExecutorWithStd(path string, sout_fd int, serr_fd int) *Executor {
-	x := new(Executor)
-	x.ptr = ExecutorConstruct(path, sout_fd, serr_fd)
-	return x
+func pointIsValid(point unsafe.Pointer) bool {
+	return CToBool(C.point_is_valid(C.point_t(point)))
+}
+
+func pointGetIndex(point unsafe.Pointer) uint32 {
+	return uint32(C.point_get_index(C.point_t(point)))
+}
+
+func pointGetChecksum(point unsafe.Pointer) uint64 {
+	return uint64(C.point_get_checksum(C.point_t(point)))
 }

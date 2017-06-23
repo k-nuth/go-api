@@ -33,6 +33,7 @@ package bitprim
 #include <bitprim/nodecint/executor_c.h>
 #include <bitprim/nodecint/header.h>
 #include <bitprim/nodecint/transaction.h>
+#include <bitprim/nodecint/payment_address.h>
 */
 import "C"
 
@@ -203,4 +204,33 @@ func GetOutput(exec unsafe.Pointer, hash HashT, index int, requireConfirmed bool
 	var outputPtr unsafe.Pointer
 	res := C.get_output(ptr, (*C.uint8_t)(hashC), C.uint32_t(index), boolToC(requireConfirmed), (*C.output_t)(&outputPtr))
 	return int(res), outputPtr
+}
+
+// --------------------------------
+// getHistory
+// --------------------------------
+
+// //It is the user's responsibility to release the history returned in the callback
+// int get_history(executor_t exec,
+//                 payment_address_t address
+//                 size_t limit,
+//                 size_t from_height,
+//                 history_compact_list_t* out_history) {
+
+func getHistory(exec unsafe.Pointer, address string, limit int, fromHeight int) (int, unsafe.Pointer) {
+	ptr := (*C.struct_executor)(exec)
+
+	address_c_str := C.CString(address)
+	defer C.free(unsafe.Pointer(address_c_str))
+
+	pa := C.payment_address_construct_from_string(address_c_str)
+	// fetch_history(exec, pa, py_limit, py_from_height, history_fetch_handler);
+	//
+
+	var historyPtr unsafe.Pointer
+	res := C.get_history(ptr, pa, C.size_t(limit), C.size_t(fromHeight), (*C.history_compact_list_t)(&historyPtr))
+
+	C.payment_address_destruct(pa)
+
+	return int(res), historyPtr
 }

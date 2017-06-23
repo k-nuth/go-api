@@ -1,5 +1,3 @@
-// +build linux
-
 /**
  * Copyright (c) 2017 Bitprim developers (see AUTHORS)
  *
@@ -20,30 +18,37 @@
  */
 
 // --------------------------------
-// Interface one-to-one with C Interface
+// Point Golang idiomatic Interface
 // --------------------------------
 
 package bitprim
 
-// --------------------------------------------------------------------------------
-
 import (
-	"C" // or "runtime"
 	"unsafe"
 )
 
-func ExecutorConstruct(path string, sout_fd int, serr_fd int) unsafe.Pointer {
-	path_c := C.CString(path)
-	defer C.free(unsafe.Pointer(path_c))
-
-	exec := C.executor_construct_fd(path_c, C.int(sout_fd), C.int(serr_fd))
-	// fmt.Printf("exec address = %p.\n", unsafe.Pointer(exec))
-	return unsafe.Pointer(exec)
-
+type Point struct {
+	ptr unsafe.Pointer
 }
 
-func NewExecutorWithStd(path string, sout_fd int, serr_fd int) *Executor {
-	x := new(Executor)
-	x.ptr = ExecutorConstruct(path, sout_fd, serr_fd)
+func NewPoint(ptr unsafe.Pointer) *Point {
+	x := new(Point)
+	x.ptr = ptr
 	return x
+}
+
+func (x Point) Hash() HashT {
+	return pointHash(x.ptr)
+}
+
+func (x *Point) IsValid() bool {
+	return pointIsValid(x.ptr)
+}
+
+func (x *Point) Index() uint32 {
+	return pointGetIndex(x.ptr)
+}
+
+func (x *Point) Checksum() uint64 {
+	return pointGetChecksum(x.ptr)
 }

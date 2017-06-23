@@ -23,7 +23,8 @@ export GOPATH=$(go env GOPATH)
 export GODEBUG=cgocheck=0
 
 export LD_LIBRARY_PATH=/home/fernando/dev/bitprim/bitprim-node-cint/cmake-build-debug:$LD_LIBRARY_PATH
-go install github.com/bitprim/bitprim-go/example
+go install github.com/bitprim/bitprim-go/fetch_history
+go get github.com/bitprim/bitprim-go/fetch_history
 $GOPATH/bin/bitprim_test
 
 cd C:\Users\Fernando\go\bin
@@ -175,7 +176,6 @@ func main() {
 	*/
 
 	go func() {
-
 		for sig := range c {
 			signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 			fmt.Printf("captured %v\n", sig)
@@ -197,8 +197,26 @@ func main() {
 			_, cheight := e.GetLastHeightAsync()
 			height := <-cheight
 
-			if height >= 100000 {
-				doSomeQueries(e)
+			// if height >= 262421 { // Juan
+			if height >= 123723 { // Satoshi
+
+				// list := e.GetHistory("1MLVpZC2CTFHheox8SCEnAbW5NBdewRTdR", 0, 0) //Juan
+				list := e.GetHistory("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", 0, 0) //Satoshi
+
+				count := list.Count()
+
+				for n := 0; n < count; n++ {
+					h := list.Nth(n)
+
+					fmt.Println("h.PointKind():        ", h.PointKind())
+					fmt.Println("h.Height():           ", h.Height())
+					fmt.Println("h.ValueOrSpend():     ", h.ValueOrSpend())
+
+					fmt.Println("h.Point().Hash():     ", h.Point().Hash())
+					fmt.Println("h.Point().IsValid():  ", h.Point().IsValid())
+					fmt.Println("h.Point().Index():    ", h.Point().Index())
+					fmt.Println("h.Point().Checksum(): ", h.Point().Checksum())
+				}
 			} else {
 				fmt.Printf("FetchLastHeight: %d\n", height)
 			}
@@ -210,16 +228,3 @@ func main() {
 		time.Sleep(30 * time.Second) // or runtime.Gosched() or similar per @misterbee
 	}
 }
-
-/*
-func main() {
-	fmt.Printf("Hello, world.\n")
-
-	exec := ExecutorConstruct("/pepe", 0, 1, 2)
-	// ExecutorInitchain(exec)
-	ExecutorRun(exec)
-	ExecutorDestruct(exec)
-
-	// fmt.Printf("%d\n", res)
-}
-*/

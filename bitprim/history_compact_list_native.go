@@ -1,5 +1,3 @@
-// +build linux
-
 /**
  * Copyright (c) 2017 Bitprim developers (see AUTHORS)
  *
@@ -19,31 +17,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// --------------------------------
-// Interface one-to-one with C Interface
-// --------------------------------
-
 package bitprim
 
-// --------------------------------------------------------------------------------
+// #include <bitprim/nodecint/history_compact_list.h>
+import "C"
 
 import (
-	"C" // or "runtime"
 	"unsafe"
 )
 
-func ExecutorConstruct(path string, sout_fd int, serr_fd int) unsafe.Pointer {
-	path_c := C.CString(path)
-	defer C.free(unsafe.Pointer(path_c))
-
-	exec := C.executor_construct_fd(path_c, C.int(sout_fd), C.int(serr_fd))
-	// fmt.Printf("exec address = %p.\n", unsafe.Pointer(exec))
-	return unsafe.Pointer(exec)
-
+func historyCompactListDestruct(historyCompactList unsafe.Pointer) {
+	C.history_compact_list_destruct(C.history_compact_list_t(historyCompactList))
 }
 
-func NewExecutorWithStd(path string, sout_fd int, serr_fd int) *Executor {
-	x := new(Executor)
-	x.ptr = ExecutorConstruct(path, sout_fd, serr_fd)
-	return x
+func historyCompactListCount(block unsafe.Pointer) int {
+	ptr := (C.history_compact_list_t)(block)
+	return (int)(C.history_compact_list_count(ptr))
+}
+
+func historyCompactListNth(block unsafe.Pointer, n int) unsafe.Pointer {
+	ptr := (C.history_compact_list_t)(block)
+	res := C.history_compact_list_nth(ptr, C.size_t(n))
+	return unsafe.Pointer(res)
 }

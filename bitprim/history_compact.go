@@ -1,5 +1,3 @@
-// +build linux
-
 /**
  * Copyright (c) 2017 Bitprim developers (see AUTHORS)
  *
@@ -20,30 +18,42 @@
  */
 
 // --------------------------------
-// Interface one-to-one with C Interface
+// HistoryCompact Golang idiomatic Interface
 // --------------------------------
 
 package bitprim
 
-// --------------------------------------------------------------------------------
-
 import (
-	"C" // or "runtime"
 	"unsafe"
 )
 
-func ExecutorConstruct(path string, sout_fd int, serr_fd int) unsafe.Pointer {
-	path_c := C.CString(path)
-	defer C.free(unsafe.Pointer(path_c))
+// func historyCompactGetPointKind(historyCompact unsafe.Pointer) C.point_kind_t {
+// func historyCompactGetPoint(historyCompact unsafe.Pointer) unsafe.Pointer {
+// func historyCompactGetHeight(historyCompact unsafe.Pointer) uint64 {
+// func historyCompactGetValueOrSpend(historyCompact unsafe.Pointer) uint64_t
 
-	exec := C.executor_construct_fd(path_c, C.int(sout_fd), C.int(serr_fd))
-	// fmt.Printf("exec address = %p.\n", unsafe.Pointer(exec))
-	return unsafe.Pointer(exec)
-
+type HistoryCompact struct {
+	ptr unsafe.Pointer
 }
 
-func NewExecutorWithStd(path string, sout_fd int, serr_fd int) *Executor {
-	x := new(Executor)
-	x.ptr = ExecutorConstruct(path, sout_fd, serr_fd)
+func NewHistoryCompact(ptr unsafe.Pointer) *HistoryCompact {
+	x := new(HistoryCompact)
+	x.ptr = ptr
 	return x
+}
+
+func (x *HistoryCompact) PointKind() int {
+	return int(historyCompactGetPointKind(x.ptr))
+}
+
+func (x *HistoryCompact) Point() *Point {
+	return NewPoint(historyCompactGetPoint(x.ptr))
+}
+
+func (x *HistoryCompact) Height() uint32 {
+	return historyCompactGetHeight(x.ptr)
+}
+
+func (x *HistoryCompact) ValueOrSpend() uint64 {
+	return historyCompactGetValueOrSpend(x.ptr)
 }
