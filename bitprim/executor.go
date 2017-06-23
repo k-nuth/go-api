@@ -36,7 +36,11 @@ type Executor struct {
 }
 
 func NewExecutor(path string) *Executor {
-	return NewExecutorWithStd(path, syscall.Stdout, syscall.Stderr)
+	return newExecutor(path)
+}
+
+func NewExecutorWithStd(path string) *Executor {
+	return newExecutorWithStd(path, syscall.Stdout, syscall.Stderr)
 }
 
 func (x *Executor) Close() {

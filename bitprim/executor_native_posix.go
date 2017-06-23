@@ -32,7 +32,7 @@ import (
 	"unsafe"
 )
 
-func ExecutorConstruct(path string, sout_fd int, serr_fd int) unsafe.Pointer {
+func executorConstruct(path string, sout_fd int, serr_fd int) unsafe.Pointer {
 	path_c := C.CString(path)
 	defer C.free(unsafe.Pointer(path_c))
 
@@ -42,8 +42,14 @@ func ExecutorConstruct(path string, sout_fd int, serr_fd int) unsafe.Pointer {
 
 }
 
-func NewExecutorWithStd(path string, sout_fd int, serr_fd int) *Executor {
+func newExecutor(path string) *Executor {
 	x := new(Executor)
-	x.ptr = ExecutorConstruct(path, sout_fd, serr_fd)
+	x.ptr = executorConstruct(path, -1, -1)
+	return x
+}
+
+func newExecutorWithStd(path string, sout_fd int, serr_fd int) *Executor {
+	x := new(Executor)
+	x.ptr = executorConstruct(path, sout_fd, serr_fd)
 	return x
 }

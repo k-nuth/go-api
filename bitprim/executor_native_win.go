@@ -44,7 +44,7 @@ import (
 	"unsafe"
 )
 
-func ExecutorConstruct(path string, sout syscall.Handle, serr syscall.Handle) unsafe.Pointer {
+func executorConstruct(path string, sout syscall.Handle, serr syscall.Handle) unsafe.Pointer {
 	path_c := C.CString(path)
 	defer C.free(unsafe.Pointer(path_c))
 
@@ -56,8 +56,14 @@ func ExecutorConstruct(path string, sout syscall.Handle, serr syscall.Handle) un
 	return unsafe.Pointer(exec)
 }
 
-func NewExecutorWithStd(path string, sout_fd syscall.Handle, serr_fd syscall.Handle) *Executor {
+func newExecutor(path string) *Executor {
 	x := new(Executor)
-	x.ptr = ExecutorConstruct(path, sout_fd, serr_fd)
+	x.ptr = executorConstruct(path, 0, 0)
+	return x
+}
+
+func newExecutorWithStd(path string, sout_fd syscall.Handle, serr_fd syscall.Handle) *Executor {
+	x := new(Executor)
+	x.ptr = executorConstruct(path, sout_fd, serr_fd)
 	return x
 }
