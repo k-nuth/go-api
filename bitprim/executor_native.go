@@ -33,23 +33,6 @@ package bitprim
 #include <bitprim/nodecint/executor_c.h>
 #include <bitprim/nodecint/header.h>
 #include <bitprim/nodecint/transaction.h>
-
-// typedef void (*fetch_last_height_handler)(int);
-// typedef void (*fetch_block_height_handler)(int);
-
-// void fetchLastHeightGoCallBack_cgo(int in); // Forward declaration.
-// void fetchBlockHeightGoCallBack_cgo(int in); // Forward declaration.
-
-// void fetchBlockHeaderGoCallBack_cgo(header_t header, size_t height); // Forward declaration.
-// void fetchBlockHeaderByHashGoCallBack_cgo(header_t header, size_t height); // Forward declaration.
-
-// void fetchBlockGoCallBack_cgo(block_t block, size_t height); // Forward declaration.
-// void fetchBlockByHashGoCallBack_cgo(block_t block, size_t height); // Forward declaration.
-
-// void fetchTransactionGoCallBack_cgo(transaction_t transaction, size_t height, size_t index); // Forward declaration.
-
-// void fetchOutputGoCallBack_cgo(output_t output); // Forward declaration.
-
 */
 import "C"
 
@@ -89,15 +72,10 @@ func ExecutorDestruct(exec unsafe.Pointer) {
 
 func ExecutorRun(exec unsafe.Pointer) int {
 	ptr := (*C.struct_executor)(exec)
-	res := C.executor_run(ptr)
-	return int(res)
-}
-
-func ExecutorRunAndWait(exec unsafe.Pointer) int {
-	ptr := (*C.struct_executor)(exec)
 	res := C.executor_run_wait(ptr)
 	return int(res)
 }
+
 func ExecutorInitchain(exec unsafe.Pointer) int {
 	ptr := (*C.struct_executor)(exec)
 	res := C.executor_initchain(ptr)
@@ -133,16 +111,16 @@ func GetBlockHeight(exec unsafe.Pointer, hash HashT) (int, int) {
 }
 
 // --------------------------------
-// GetBlockHeader
+// GetBlockHeaderByHeight
 // --------------------------------
 
-func GetBlockHeader(exec unsafe.Pointer, height int) (int, unsafe.Pointer, int) {
+func GetBlockHeaderByHeight(exec unsafe.Pointer, height int) (int, unsafe.Pointer, int) {
 	ptr := (*C.struct_executor)(exec)
 
 	var outHeight C.size_t
 	var headerPtr unsafe.Pointer
 
-	res := C.get_block_header(ptr, (C.size_t)(height), (*C.header_t)(&headerPtr), &outHeight)
+	res := C.get_block_header_by_height(ptr, (C.size_t)(height), (*C.header_t)(&headerPtr), &outHeight)
 
 	return int(res), headerPtr, int(outHeight)
 }
@@ -165,16 +143,16 @@ func GetBlockHeaderByHash(exec unsafe.Pointer, hash HashT) (int, unsafe.Pointer,
 }
 
 // --------------------------------
-// GetBlock
+// GetBlockByHeight
 // --------------------------------
 
-func GetBlock(exec unsafe.Pointer, height int) (int, unsafe.Pointer, int) {
+func GetBlockByHeight(exec unsafe.Pointer, height int) (int, unsafe.Pointer, int) {
 	ptr := (*C.struct_executor)(exec)
 
 	var outHeight C.size_t
 	var blockPtr unsafe.Pointer
 
-	res := C.get_block(ptr, (C.size_t)(height), (*C.block_t)(&blockPtr), &outHeight)
+	res := C.get_block_by_height(ptr, (C.size_t)(height), (*C.block_t)(&blockPtr), &outHeight)
 	return int(res), blockPtr, int(outHeight)
 }
 

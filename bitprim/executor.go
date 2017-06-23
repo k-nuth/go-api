@@ -36,7 +36,7 @@ type Executor struct {
 }
 
 func NewExecutor(path string) *Executor {
-	return NewExecutorWithStd(path, syscall.Stdin, syscall.Stdout, syscall.Stderr)
+	return NewExecutorWithStd(path, syscall.Stdout, syscall.Stderr)
 }
 
 func (x *Executor) Close() {
@@ -46,10 +46,6 @@ func (x *Executor) Close() {
 
 func (x Executor) Run() int {
 	return ExecutorRun(x.ptr)
-}
-
-func (x Executor) RunAndWait() int {
-	return ExecutorRunAndWait(x.ptr)
 }
 
 func (x Executor) Initchain() int {
@@ -87,17 +83,17 @@ func (x Executor) GetBlockHeightAsync(hash HashT) (chan int, chan int) {
 }
 
 //TODO: Error management!
-func (x Executor) GetBlockHeader(height int) *Header {
-	_, ptr, h := GetBlockHeader(x.ptr, height)
+func (x Executor) GetBlockHeaderByHeight(height int) *Header {
+	_, ptr, h := GetBlockHeaderByHeight(x.ptr, height)
 	res := NewHeader(ptr, h)
 	return res
 }
 
 //TODO: Error management!
-func (x Executor) GetBlockHeaderAsync(height int) chan *Header {
+func (x Executor) GetBlockHeaderByHeightAsync(height int) chan *Header {
 	ch := make(chan *Header)
 	go func() {
-		th := x.GetBlockHeader(height)
+		th := x.GetBlockHeaderByHeight(height)
 		ch <- th
 	}()
 	return ch
@@ -121,17 +117,17 @@ func (x Executor) GetBlockHeaderByHashAsync(hash HashT) chan *Header {
 }
 
 //TODO: Error management!
-func (x Executor) GetBlock(height int) *Block {
-	_, ptr, h := GetBlock(x.ptr, height)
+func (x Executor) GetBlockByHeight(height int) *Block {
+	_, ptr, h := GetBlockByHeight(x.ptr, height)
 	res := NewBlock(ptr, h)
 	return res
 }
 
 //TODO: Error management!
-func (x Executor) GetBlockAsync(height int) chan *Block {
+func (x Executor) GetBlockByHeightAsync(height int) chan *Block {
 	ch := make(chan *Block)
 	go func() {
-		th := x.GetBlock(height)
+		th := x.GetBlockByHeight(height)
 		ch <- th
 	}()
 	return ch

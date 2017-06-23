@@ -54,18 +54,6 @@ func blockTransactionCount(block unsafe.Pointer) int {
 	return (int)(C.block_transaction_count(ptr))
 }
 
-func blockTransactions(block unsafe.Pointer) (unsafe.Pointer, int) {
-	ptr := (C.block_t)(block)
-	var n C.size_t
-	res := C.block_transactions(ptr, &n)
-	return unsafe.Pointer(res), int(n)
-}
-
-func blockTransactionNext(transaction unsafe.Pointer) unsafe.Pointer {
-	ptr := (C.transaction_t)(transaction)
-	return unsafe.Pointer(C.block_transaction_next(ptr))
-}
-
 func blockTransactionNth(block unsafe.Pointer, n int) unsafe.Pointer {
 	ptr := (C.block_t)(block)
 	res := C.block_transaction_nth(ptr, C.size_t(n))
