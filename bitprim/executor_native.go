@@ -25,7 +25,7 @@ package bitprim
 
 /*
 #cgo linux CFLAGS: -I/home/fernando/dev/bitprim/bitprim-node-cint/include -I/home/fernando/dev/bitprim/bitprim-core/include
-#cgo linux LDFLAGS: -L/home/fernando/dev/bitprim/bitprim-node-cint/cmake-build-release -lbitprim-node-cint
+#cgo linux LDFLAGS: -L/home/fernando/dev/bitprim/bitprim-node-cint/build -lbitprim-node-cint
 
 #include <stdio.h>
 #include <stdlib.h>

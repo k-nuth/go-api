@@ -23,12 +23,13 @@ export GOPATH=$(go env GOPATH)
 export GODEBUG=cgocheck=0
 
 export LD_LIBRARY_PATH=/home/fernando/dev/bitprim/bitprim-node-cint/cmake-build-debug:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/fernando/dev/bitprim/bitprim-node-cint/build:$LD_LIBRARY_PATH
 
 go install github.com/bitprim/bitprim-go/rest-api
 go get github.com/bitprim/bitprim-go/rest-api
 go get go get github.com/gorilla/mux
 
-$GOPATH/bin/bitprim_test
+$GOPATH/bin/rest-api
 
 cd C:\Users\Fernando\go\bin
 */
@@ -72,7 +73,10 @@ func startHttpServer(e *bitprim.Executor) *http.Server {
 		fmt.Fprintf(w, "Last Height: %d\n", height)
 	})
 
-	// http://127.0.0.1:8080/history/1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+	// Satoshi - 123723
+	// http://127.0.0.1:8088/history/1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+	// Juan - 262421
+	// http://127.0.0.1:8088/history/1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
 
 	router.HandleFunc("/history/{paymentAddress}", func(w http.ResponseWriter, r *http.Request) {
 
@@ -100,39 +104,13 @@ func startHttpServer(e *bitprim.Executor) *http.Server {
 		}
 	})
 
-	// // if height >= 262421 { // Juan
-	// if height >= 123723 { // Satoshi
-
-	// 	// list := e.GetHistory("1MLVpZC2CTFHheox8SCEnAbW5NBdewRTdR", 0, 0) //Juan
-	// 	list := e.GetHistory("1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa", 0, 0) //Satoshi
-
-	// 	count := list.Count()
-
-	// 	for n := 0; n < count; n++ {
-	// 		h := list.Nth(n)
-
-	// 		fmt.Println("h.PointKind():        ", h.PointKind())
-	// 		fmt.Println("h.Height():           ", h.Height())
-	// 		fmt.Println("h.ValueOrSpend():     ", h.ValueOrSpend())
-
-	// 		fmt.Println("h.Point().Hash():     ", h.Point().Hash())
-	// 		fmt.Println("h.Point().IsValid():  ", h.Point().IsValid())
-	// 		fmt.Println("h.Point().Index():    ", h.Point().Index())
-	// 		fmt.Println("h.Point().Checksum(): ", h.Point().Checksum())
-	// 	}
-	// } else {
-	// 	fmt.Printf("FetchLastHeight: %d\n", height)
-	// }
-
-	srv := &http.Server{Addr: ":8080", Handler: router}
+	srv := &http.Server{Addr: ":8088", Handler: router}
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil {
 			log.Printf("Httpserver: ListenAndServe() error: %s", err)
 		}
 	}()
-
-	// log.Fatal(http.ListenAndServe(":8080", router))
 
 	return srv
 }
@@ -188,9 +166,14 @@ func main() {
 
 	fmt.Println("closing...")
 
+	err := srv.Shutdown(nil)
 	e.Close()
 
-	if err := srv.Shutdown(nil); err != nil {
+	// if err := srv.Shutdown(nil); err != nil {
+	// 	panic(err) // failure/timeout shutting down the server gracefully
+	// }
+
+	if err != nil {
 		panic(err) // failure/timeout shutting down the server gracefully
 	}
 

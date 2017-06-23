@@ -1,3 +1,5 @@
+// +build windows
+
 /**
  * Copyright (c) 2017 Bitprim developers (see AUTHORS)
  *

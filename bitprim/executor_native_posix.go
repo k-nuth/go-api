@@ -27,8 +27,16 @@ package bitprim
 
 // --------------------------------------------------------------------------------
 
+/*
+#cgo linux CFLAGS: -I/home/fernando/dev/bitprim/bitprim-node-cint/include -I/home/fernando/dev/bitprim/bitprim-core/include
+#cgo linux LDFLAGS: -L/home/fernando/dev/bitprim/bitprim-node-cint/build -lbitprim-node-cint
+#include <stdio.h>
+#include <stdlib.h>
+#include <bitprim/nodecint/executor_c.h>
+*/
+import "C"
+
 import (
-	"C" // or "runtime"
 	"unsafe"
 )
 
@@ -39,7 +47,6 @@ func executorConstruct(path string, sout_fd int, serr_fd int) unsafe.Pointer {
 	exec := C.executor_construct_fd(path_c, C.int(sout_fd), C.int(serr_fd))
 	// fmt.Printf("exec address = %p.\n", unsafe.Pointer(exec))
 	return unsafe.Pointer(exec)
-
 }
 
 func newExecutor(path string) *Executor {
