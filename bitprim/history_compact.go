@@ -54,6 +54,6 @@ func (x *HistoryCompact) Height() uint32 {
 	return historyCompactGetHeight(x.ptr)
 }
 
-func (x *HistoryCompact) ValueOrSpend() uint64 {
-	return historyCompactGetValueOrSpend(x.ptr)
+func (x *HistoryCompact) ValueOrPreviousChecksum() uint64 {
+	return historyCompactGetValueOrPreviousChecksum(x.ptr)
 }

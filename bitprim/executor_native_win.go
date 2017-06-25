@@ -23,16 +23,11 @@
 // Interface one-to-one with C Interface
 // --------------------------------
 
-// cgo CFLAGS: -IC:/development/bitprim/bitprim-node-cint/include -IC:/development/bitprim/bitprim-core/include
-// cgo LDFLAGS: -LC:/development/bitprim/bitprim-node-cint/cmake-build-release -lbitprim-node-cint
-
 package bitprim
 
-// --------------------------------------------------------------------------------
-
 /*
-#cgo CFLAGS: -IC:/development/bitprim2/bitprim-node-cint/include -IC:/development/bitprim2/bitprim-core/include
-#cgo LDFLAGS: -LC:/development/bitprim2/bitprim-node-cint/build -lbitprim-node-cint
+#cgo windows CFLAGS: -IC:/development/bitprim/bitprim-node-cint/include -IC:/development/bitprim/bitprim-core/include
+#cgo windows LDFLAGS: -LC:/development/bitprim/bitprim-node-cint/build -lbitprim-node-cint
 
 #include <stdio.h>
 #include <stdlib.h>

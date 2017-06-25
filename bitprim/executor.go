@@ -190,10 +190,14 @@ func (x Executor) GetOutputAsync(hash HashT, index int, requiredConfirmed bool) 
 }
 
 // ----------------------------------------------------------
-// func getHistory(exec unsafe.Pointer, address string, limit int, fromHeight int) (int, unsafe.Pointer) {
 
 func (x Executor) GetHistory(address string, limit int, fromHeight int) *HistoryCompactList {
 	_, ptr := getHistory(x.ptr, address, limit, fromHeight)
 	res := NewHistoryCompactList(ptr)
 	return res
+}
+
+func (x Executor) GetHistoryExpanded(address string, limit int, fromHeight int) HistoryList {
+	list := x.GetHistory(address, limit, fromHeight)
+	return Expand(*list)
 }

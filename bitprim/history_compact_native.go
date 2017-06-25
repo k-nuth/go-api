@@ -43,6 +43,6 @@ func historyCompactGetHeight(historyCompact unsafe.Pointer) uint32 {
 	return uint32(C.history_compact_get_height(C.history_compact_t(historyCompact)))
 }
 
-func historyCompactGetValueOrSpend(historyCompact unsafe.Pointer) uint64 {
-	return uint64(C.history_compact_get_value_or_spend(C.history_compact_t(historyCompact)))
+func historyCompactGetValueOrPreviousChecksum(historyCompact unsafe.Pointer) uint64 {
+	return uint64(C.history_compact_get_value_or_previous_checksum(C.history_compact_t(historyCompact)))
 }

@@ -37,9 +37,9 @@ cd C:\Users\Fernando\go\bin
 package main
 
 import (
-	"encoding/hex"
+	"encoding/json"
 	"fmt" // or "runtime"
-	"html"
+	// "html"
 	"log"
 	"net/http"
 	"os"
@@ -50,70 +50,51 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func reverseHash(h bitprim.HashT) bitprim.HashT {
-	for i, j := 0, len(h)-1; i < j; i, j = i+1, j-1 {
-		h[i], h[j] = h[j], h[i]
-	}
-	return h
-}
-
 func startHttpServer(e *bitprim.Executor) *http.Server {
 
 	router := mux.NewRouter().StrictSlash(true)
-	// router.HandleFunc("/", Index)
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-	})
 
+	// router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
+	// })
+
+	// http://127.0.0.1:8088/last-height
 	router.HandleFunc("/last-height", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Called last-height")
+		// fmt.Println("Called last-height")
 
 		_, height := e.GetLastHeight()
 
-		fmt.Printf("Last Height %d\n", height)
+		// fmt.Printf("Last Height %d\n", height)
 		fmt.Fprintf(w, "Last Height: %d\n", height)
 	})
 
 	// ./bx-linux-x64-qrcode fetch-history 134HfD2fdeBTohfx8YANxEpsYXsv5UoWyz
 	// ./bx-linux-x64-qrcode fetch-history 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
 	// ./bx-linux-x64-qrcode fetch-history 1MLVpZC2CTFHheox8SCEnAbW5NBdewRTdR
+	// ./bx-linux-x64-qrcode fetch-history 15Z5YJaaNSxeynvr6uW6jQZLwq3n1Hu6RX
 
 	// Ejemplo BX - 247683
 	// http://127.0.0.1:8088/history/134HfD2fdeBTohfx8YANxEpsYXsv5UoWyz
+
 	// Satoshi - 123723
 	// http://127.0.0.1:8088/history/1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+
 	// Juan - 262421
 	// http://127.0.0.1:8088/history/1MLVpZC2CTFHheox8SCEnAbW5NBdewRTdR
 
-	router.HandleFunc("/history/{paymentAddress}", func(w http.ResponseWriter, r *http.Request) {
+	// xxx - 50026
+	// http://127.0.0.1:8088/history/15Z5YJaaNSxeynvr6uW6jQZLwq3n1Hu6RX
 
+	router.HandleFunc("/history/{paymentAddress}", func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		paymentAddress := vars["paymentAddress"]
-		fmt.Fprintln(w, "history:", paymentAddress)
-		fmt.Println("history:", paymentAddress)
+		// fmt.Fprintln(w, "history:", paymentAddress)
+		// fmt.Println("history:", paymentAddress)
 
-		list := e.GetHistory(paymentAddress, 0, 0)
-
-		count := list.Count()
-
-		for n := 0; n < count; n++ {
-			h := list.Nth(n)
-
-			fmt.Fprintln(w, "n:                    ", n)
-			fmt.Fprintln(w, "h.PointKind():        ", h.PointKind())
-			fmt.Fprintln(w, "h.Height():           ", h.Height())
-			fmt.Fprintln(w, "h.ValueOrSpend():     ", h.ValueOrSpend())
-
-			hash := reverseHash(h.Point().Hash())
-			hashStr := hex.EncodeToString(hash[:])
-
-			// fmt.Fprintln(w, "h.Point().Hash():     ", h.Point().Hash())
-			fmt.Fprintln(w, "h.Point().Hash():     ", hashStr)
-
-			fmt.Fprintln(w, "h.Point().IsValid():  ", h.Point().IsValid())
-			fmt.Fprintln(w, "h.Point().Index():    ", h.Point().Index())
-			fmt.Fprintln(w, "h.Point().Checksum(): ", h.Point().Checksum())
-		}
+		list := e.GetHistoryExpanded(paymentAddress, 0, 0)
+		transfers := bitprim.ToJsonStruct(list)
+		json.MarshalIndent(transfers, "", "    ")
+		json.NewEncoder(w).Encode(transfers)
 	})
 
 	srv := &http.Server{Addr: ":8088", Handler: router}
@@ -178,15 +159,15 @@ func main() {
 
 	fmt.Println("closing...")
 
-	err := srv.Shutdown(nil)
 	e.Close()
+	err := srv.Shutdown(nil)
 
 	// if err := srv.Shutdown(nil); err != nil {
 	// 	panic(err) // failure/timeout shutting down the server gracefully
 	// }
 
 	if err != nil {
-		panic(err) // failure/timeout shutting down the server gracefully
+		// panic(err) // failure/timeout shutting down the server gracefully
 	}
 
 	fmt.Println("exiting...")
