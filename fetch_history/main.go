@@ -203,7 +203,7 @@ func main() {
 
 					fmt.Println("h.PointKind():        ", h.PointKind())
 					fmt.Println("h.Height():           ", h.Height())
-					fmt.Println("h.ValueOrSpend():     ", h.ValueOrSpend())
+					fmt.Println("h.ValueOrPreviousChecksum():     ", h.ValueOrPreviousChecksum())
 
 					fmt.Println("h.Point().Hash():     ", h.Point().Hash())
 					fmt.Println("h.Point().IsValid():  ", h.Point().IsValid())

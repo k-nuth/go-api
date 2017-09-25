@@ -51,7 +51,7 @@ func (x *Input) IsFinal() bool {
 	return inputIsFinal(x.ptr)
 }
 
-func (x *Input) SerializedSize(wire bool /* = true*/) uint64 /*size_t*/ {
+func (x *Input) SerializedSize(wire bool /* = true*/) uint64 {
 	return inputSerializedSize(x.ptr, wire)
 }
 
@@ -59,7 +59,7 @@ func (x *Input) Sequence() uint32 {
 	return inputSequence(x.ptr)
 }
 
-func (x *Input) SignatureOperations(bip16Active bool) uint64 /*size_t*/ {
+func (x *Input) SignatureOperations(bip16Active bool) uint64 {
 	return inputSignatureOperations(x.ptr, bip16Active)
 }
 

@@ -25,9 +25,22 @@
 
 package bitprim
 
+//cgo windows CFLAGS: -IC:/development/bitprim/bitprim-node-cint/include -IC:/development/bitprim/bitprim-core/include
+//cgo windows LDFLAGS: -LC:/development/bitprim/bitprim-node-cint/build -lbitprim-node-cint
+
+// cgo CFLAGS: -I./bitprim_c/include -I./bitprim_c/include
+// cgo LDFLAGS: -L./bitprim_c/lib -lbitprim-node-cint
+
+// cgo CFLAGS: -IC:/Users/Fernando/go/src/github.com/bitprim/bitprim-go/bitprim_c/include -IC:/Users/Fernando/go/src/github.com/bitprim/bitprim-go/bitprim_c/include
+// cgo LDFLAGS: -LC:/Users/Fernando/go/src/github.com/bitprim/bitprim-go/bitprim_c/lib -lbitprim-node-cint
+
+// #cgo LDFLAGS: -LC:/Users/Fernando/go/src/github.com/bitprim/bitprim-go/bitprim_c/lib/libbitprim-node-cint.a
+
+// conan install . --profile mingw -o bitprim-node-cint:shared=True
+
 /*
-#cgo windows CFLAGS: -IC:/development/bitprim/bitprim-node-cint/include -IC:/development/bitprim/bitprim-core/include
-#cgo windows LDFLAGS: -LC:/development/bitprim/bitprim-node-cint/build -lbitprim-node-cint
+#cgo CFLAGS: -IC:/Users/Fernando/go/src/github.com/bitprim/bitprim-go/bitprim_c/include -IC:/Users/Fernando/go/src/github.com/bitprim/bitprim-go/bitprim_c/include
+#cgo LDFLAGS: -LC:/Users/Fernando/go/src/github.com/bitprim/bitprim-go/bitprim_c/lib -lbitprim-node-cint
 
 #include <stdio.h>
 #include <stdlib.h>

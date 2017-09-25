@@ -41,19 +41,40 @@ func NewTransaction(ptr unsafe.Pointer, height int, index int) *Transaction {
 	x.height = height
 	x.index = index
 
-	n := transactionOutputCount(ptr)
+	// n := transactionOutputCount(ptr)
+	// i := 0
+	// for i != n {
+	// 	ptr := transactionOutputNth(ptr, i)
+	// 	out := NewOutput(ptr)
+	// 	x.outputs = append(x.outputs, *out)
+	// 	i++
+	// }
+
+	outputsPtr := transactionOutputs(ptr)
+	n := outputListCount(outputsPtr)
 	i := 0
+
 	for i != n {
-		ptr := transactionOutputNth(ptr, i)
+		ptr := outputListNth(outputsPtr, i)
 		out := NewOutput(ptr)
 		x.outputs = append(x.outputs, *out)
 		i++
 	}
 
-	n = transactionInputCount(ptr)
+	// n = transactionInputCount(ptr)
+	// i = 0
+	// for i != n {
+	// 	ptr := transactionInputNth(ptr, i)
+	// 	in := NewInput(ptr)
+	// 	x.inputs = append(x.inputs, *in)
+	// 	i++
+	// }
+
+	inputsPtr := transactionInputs(ptr)
+	n = inputListCount(inputsPtr)
 	i = 0
 	for i != n {
-		ptr := transactionInputNth(ptr, i)
+		ptr := inputListNth(inputsPtr, i)
 		in := NewInput(ptr)
 		x.inputs = append(x.inputs, *in)
 		i++
@@ -94,7 +115,7 @@ func (x Transaction) Locktime() uint32 {
 	return transactionLocktime(x.ptr)
 }
 
-func (x Transaction) SerializedSize(wire bool /*= true*/) uint64 /*size_t*/ {
+func (x Transaction) SerializedSize(wire bool /*= true*/) uint64 {
 	return transactionSerializedSize(x.ptr, wire)
 }
 
@@ -102,11 +123,11 @@ func (x Transaction) Fees() uint64 {
 	return transactionFees(x.ptr)
 }
 
-func (x Transaction) SignatureOperations() uint64 /*size_t*/ {
+func (x Transaction) SignatureOperations() uint64 {
 	return transactionSignatureOperations(x.ptr)
 }
 
-func (x Transaction) SignatureOperationsBip16Active(bip16Active bool) uint64 /*size_t*/ {
+func (x Transaction) SignatureOperationsBip16Active(bip16Active bool) uint64 {
 	return transactionSignatureOperationsBip16Active(x.ptr, bip16Active)
 }
 
@@ -130,8 +151,8 @@ func (x Transaction) IsOversizedCoinbase() bool {
 	return transactionIsOversizedCoinbase(x.ptr)
 }
 
-func (x Transaction) IsImmature(targetHeight uint64 /*size_t*/) bool {
-	return transactionIsImmature(x.ptr, targetHeight)
+func (x Transaction) IsMature(targetHeight uint64) bool {
+	return transactionIsMature(x.ptr, targetHeight)
 }
 
 func (x Transaction) IsOverspent() bool {
@@ -146,7 +167,7 @@ func (x Transaction) IsMissingPreviousOutputs() bool {
 	return transactionIsMissingPreviousOutputs(x.ptr)
 }
 
-func (x Transaction) IsFinal(blockHeight uint64 /*size_t*/, blockTime uint32) bool {
+func (x Transaction) IsFinal(blockHeight uint64, blockTime uint32) bool {
 	return transactionIsFinal(x.ptr, blockHeight, blockTime)
 }
 

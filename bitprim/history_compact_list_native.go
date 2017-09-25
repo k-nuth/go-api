@@ -19,7 +19,7 @@
 
 package bitprim
 
-// #include <bitprim/nodecint/history_compact_list.h>
+// #include <bitprim/nodecint/chain/history_compact_list.h>
 import "C"
 
 import (
@@ -27,16 +27,16 @@ import (
 )
 
 func historyCompactListDestruct(historyCompactList unsafe.Pointer) {
-	C.history_compact_list_destruct(C.history_compact_list_t(historyCompactList))
+	C.chain_history_compact_list_destruct(C.history_compact_list_t(historyCompactList))
 }
 
 func historyCompactListCount(block unsafe.Pointer) int {
 	ptr := (C.history_compact_list_t)(block)
-	return (int)(C.history_compact_list_count(ptr))
+	return (int)(C.chain_history_compact_list_count(ptr))
 }
 
 func historyCompactListNth(block unsafe.Pointer, n int) unsafe.Pointer {
 	ptr := (C.history_compact_list_t)(block)
-	res := C.history_compact_list_nth(ptr, C.size_t(n))
+	res := C.chain_history_compact_list_nth(ptr, C.uint64_t(n))
 	return unsafe.Pointer(res)
 }

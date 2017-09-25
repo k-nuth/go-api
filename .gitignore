@@ -1,0 +1,9 @@
+bitprim_c/
+blockchain/
+conan_imports_manifest.txt
+conanbuildinfo.cmake
+conanfile.pyc
+conaninfo.txt
+debug.log
+error.log
+test.c

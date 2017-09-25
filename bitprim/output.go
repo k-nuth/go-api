@@ -47,7 +47,7 @@ func (x *Output) IsValid() bool {
 	return outputIsValid(x.ptr)
 }
 
-func (x *Output) SerializedSize(wire bool /* = true*/) uint64 /*size_t*/ {
+func (x *Output) SerializedSize(wire bool /* = true*/) uint64 {
 	return outputSerializedSize(x.ptr, wire)
 }
 
@@ -55,7 +55,7 @@ func (x *Output) Value() uint64 {
 	return outputValue(x.ptr)
 }
 
-func (x *Output) SignatureOperations() uint64 /*size_t*/ {
+func (x *Output) SignatureOperations() uint64 {
 	return outputSignatureOperations(x.ptr)
 }
 

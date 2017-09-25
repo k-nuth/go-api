@@ -19,7 +19,7 @@
 
 package bitprim
 
-// #include <bitprim/nodecint/input.h>
+// #include <bitprim/nodecint/chain/input.h>
 import "C"
 
 import (
@@ -27,33 +27,33 @@ import (
 )
 
 func inputDestruct(input unsafe.Pointer) {
-	C.input_destruct(C.input_t(input))
+	C.chain_input_destruct(C.input_t(input))
 }
 
 func inputIsValid(input unsafe.Pointer) bool {
-	return CToBool(C.input_is_valid(C.input_t(input)))
+	return CToBool(C.chain_input_is_valid(C.input_t(input)))
 }
 
 func inputIsFinal(input unsafe.Pointer) bool {
-	return CToBool(C.input_is_final(C.input_t(input)))
+	return CToBool(C.chain_input_is_final(C.input_t(input)))
 }
 
-func inputSerializedSize(input unsafe.Pointer, wire bool /* = true*/) uint64 /*size_t*/ {
-	return uint64(C.input_serialized_size(C.input_t(input), boolToC(wire)))
+func inputSerializedSize(input unsafe.Pointer, wire bool /* = true*/) uint64 {
+	return uint64(C.chain_input_serialized_size(C.input_t(input), boolToC(wire)))
 }
 
 func inputSequence(input unsafe.Pointer) uint32 {
-	return uint32(C.input_sequence(C.input_t(input)))
+	return uint32(C.chain_input_sequence(C.input_t(input)))
 }
 
-func inputSignatureOperations(input unsafe.Pointer, bip16Active bool) uint64 /*size_t*/ {
-	return uint64(C.input_signature_operations(C.input_t(input), boolToC(bip16Active)))
+func inputSignatureOperations(input unsafe.Pointer, bip16Active bool) uint64 {
+	return uint64(C.chain_input_signature_operations(C.input_t(input), boolToC(bip16Active)))
 }
 
 func inputScript(input unsafe.Pointer) unsafe.Pointer {
-	return unsafe.Pointer(C.input_script(C.input_t(input)))
+	return unsafe.Pointer(C.chain_input_script(C.input_t(input)))
 }
 
 func inputPreviousOutput(input unsafe.Pointer) unsafe.Pointer {
-	return unsafe.Pointer(C.input_previous_output(C.input_t(input)))
+	return unsafe.Pointer(C.chain_input_previous_output(C.input_t(input)))
 }

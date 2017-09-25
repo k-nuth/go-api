@@ -19,7 +19,7 @@
 
 package bitprim
 
-// #include <bitprim/nodecint/point.h>
+// #include <bitprim/nodecint/chain/point.h>
 import "C"
 
 import (
@@ -33,17 +33,17 @@ import (
 
 func pointHash(point unsafe.Pointer) HashT {
 	ptr := (C.point_t)(point)
-	return CHashToGo(C.point_get_hash(ptr))
+	return CHashToGo(C.chain_point_get_hash(ptr))
 }
 
 func pointIsValid(point unsafe.Pointer) bool {
-	return CToBool(C.point_is_valid(C.point_t(point)))
+	return CToBool(C.chain_point_is_valid(C.point_t(point)))
 }
 
 func pointGetIndex(point unsafe.Pointer) uint32 {
-	return uint32(C.point_get_index(C.point_t(point)))
+	return uint32(C.chain_point_get_index(C.point_t(point)))
 }
 
 func pointGetChecksum(point unsafe.Pointer) uint64 {
-	return uint64(C.point_get_checksum(C.point_t(point)))
+	return uint64(C.chain_point_get_checksum(C.point_t(point)))
 }

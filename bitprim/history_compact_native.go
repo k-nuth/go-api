@@ -19,7 +19,7 @@
 
 package bitprim
 
-// #include <bitprim/nodecint/history_compact.h>
+// #include <bitprim/nodecint/chain/history_compact.h>
 import "C"
 
 import (
@@ -32,17 +32,17 @@ import (
 // uint64_t history_compact_get_value_or_spend(history_compact_t history);
 
 func historyCompactGetPointKind(historyCompact unsafe.Pointer) C.point_kind_t {
-	return C.history_compact_get_point_kind(C.history_compact_t(historyCompact))
+	return C.chain_history_compact_get_point_kind(C.history_compact_t(historyCompact))
 }
 
 func historyCompactGetPoint(historyCompact unsafe.Pointer) unsafe.Pointer {
-	return unsafe.Pointer(C.history_compact_get_point(C.history_compact_t(historyCompact)))
+	return unsafe.Pointer(C.chain_history_compact_get_point(C.history_compact_t(historyCompact)))
 }
 
 func historyCompactGetHeight(historyCompact unsafe.Pointer) uint32 {
-	return uint32(C.history_compact_get_height(C.history_compact_t(historyCompact)))
+	return uint32(C.chain_history_compact_get_height(C.history_compact_t(historyCompact)))
 }
 
 func historyCompactGetValueOrPreviousChecksum(historyCompact unsafe.Pointer) uint64 {
-	return uint64(C.history_compact_get_value_or_previous_checksum(C.history_compact_t(historyCompact)))
+	return uint64(C.chain_history_compact_get_value_or_previous_checksum(C.history_compact_t(historyCompact)))
 }

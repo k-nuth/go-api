@@ -19,33 +19,24 @@
 
 package bitprim
 
-// #include <bitprim/nodecint/chain/output.h>
+// #include <bitprim/nodecint/chain/input_list.h>
 import "C"
 
 import (
 	"unsafe"
 )
 
-func outputDestruct(output unsafe.Pointer) {
-	C.chain_output_destruct(C.output_t(output))
+func inputListDestruct(inputList unsafe.Pointer) {
+	C.chain_input_list_destruct(C.input_list_t(inputList))
 }
 
-func outputIsValid(output unsafe.Pointer) bool {
-	return CToBool(C.chain_output_is_valid(C.output_t(output)))
+func inputListCount(block unsafe.Pointer) int {
+	ptr := (C.input_list_t)(block)
+	return (int)(C.chain_input_list_count(ptr))
 }
 
-func outputSerializedSize(output unsafe.Pointer, wire bool /* = true*/) uint64 {
-	return uint64(C.chain_output_serialized_size(C.output_t(output), boolToC(wire)))
-}
-
-func outputValue(output unsafe.Pointer) uint64 {
-	return uint64(C.chain_output_value(C.output_t(output)))
-}
-
-func outputSignatureOperations(output unsafe.Pointer) uint64 {
-	return uint64(C.chain_output_signature_operations(C.output_t(output)))
-}
-
-func outputScript(output unsafe.Pointer) unsafe.Pointer {
-	return unsafe.Pointer(C.chain_output_script(C.output_t(output)))
+func inputListNth(block unsafe.Pointer, n int) unsafe.Pointer {
+	ptr := (C.input_list_t)(block)
+	res := C.chain_input_list_nth(ptr, C.uint64_t(n))
+	return unsafe.Pointer(res)
 }

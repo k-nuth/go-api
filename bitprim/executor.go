@@ -171,23 +171,22 @@ func (x Executor) GetTransactionAsync(hash HashT, requiredConfirmed bool) chan *
 	return ch
 }
 
-// ----------------------------------------------------------
-//TODO: Error management!
-func (x Executor) GetOutput(hash HashT, index int, requiredConfirmed bool) *Output {
-	_, ptr := GetOutput(x.ptr, hash, index, requiredConfirmed)
-	res := NewOutput(ptr)
-	return res
-}
-
-//TODO: Error management!
-func (x Executor) GetOutputAsync(hash HashT, index int, requiredConfirmed bool) chan *Output {
-	ch := make(chan *Output)
-	go func() {
-		th := x.GetOutput(hash, index, requiredConfirmed)
-		ch <- th
-	}()
-	return ch
-}
+// // ----------------------------------------------------------
+// //TODO: Error management!
+// func (x Executor) GetOutput(hash HashT, index int, requiredConfirmed bool) *Output {
+// 	_, ptr := GetOutput(x.ptr, hash, index, requiredConfirmed)
+// 	res := NewOutput(ptr)
+// 	return res
+// }
+// //TODO: Error management!
+// func (x Executor) GetOutputAsync(hash HashT, index int, requiredConfirmed bool) chan *Output {
+// 	ch := make(chan *Output)
+// 	go func() {
+// 		th := x.GetOutput(hash, index, requiredConfirmed)
+// 		ch <- th
+// 	}()
+// 	return ch
+// }
 
 // ----------------------------------------------------------
 

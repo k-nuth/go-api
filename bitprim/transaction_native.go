@@ -23,7 +23,7 @@
 
 package bitprim
 
-// #include <bitprim/nodecint/transaction.h>
+// #include <bitprim/nodecint/chain/transaction.h>
 import "C"
 
 import (
@@ -32,117 +32,126 @@ import (
 
 func transactionDestruct(tx unsafe.Pointer) {
 	ptr := C.transaction_t(tx)
-	C.transaction_destruct(ptr)
+	C.chain_transaction_destruct(ptr)
 }
 
 func transactionIsValid(tx unsafe.Pointer) bool {
 	ptr := C.transaction_t(tx)
-	res := C.transaction_is_valid(ptr)
+	res := C.chain_transaction_is_valid(ptr)
 	return res == 0
 }
 
 func transactionVersion(tx unsafe.Pointer) int {
 	ptr := C.transaction_t(tx)
-	return (int)(C.transaction_version(ptr))
+	return (int)(C.chain_transaction_version(ptr))
 }
 
 func transactionSetVersion(tx unsafe.Pointer, version int) {
 	ptr := C.transaction_t(tx)
-	C.transaction_set_version(ptr, (C.uint32_t)(version))
+	C.chain_transaction_set_version(ptr, (C.uint32_t)(version))
 }
 
 func transactionHash(tx unsafe.Pointer) HashT {
 	ptr := C.transaction_t(tx)
-	return CHashToGo(C.transaction_hash(ptr))
+	return CHashToGo(C.chain_transaction_hash(ptr))
 }
 
 func transactionHashSighashType(tx unsafe.Pointer, sighash_type uint32) HashT {
 	ptr := C.transaction_t(tx)
-	return CHashToGo(C.transaction_hash_sighash_type(ptr, C.uint32_t(sighash_type)))
+	return CHashToGo(C.chain_transaction_hash_sighash_type(ptr, C.uint32_t(sighash_type)))
 }
 
 // ------------------------------
 
 func transactionLocktime(tx unsafe.Pointer) uint32 {
-	return uint32(C.transaction_locktime(C.transaction_t(tx)))
+	return uint32(C.chain_transaction_locktime(C.transaction_t(tx)))
 }
 
-func transactionSerializedSize(tx unsafe.Pointer, wire bool /*= true*/) uint64 /*size_t*/ {
-	return uint64(C.transaction_serialized_size(C.transaction_t(tx), boolToC(wire)))
+func transactionSerializedSize(tx unsafe.Pointer, wire bool /*= true*/) uint64 {
+	return uint64(C.chain_transaction_serialized_size(C.transaction_t(tx), boolToC(wire)))
 }
 
 func transactionFees(tx unsafe.Pointer) uint64 {
-	return uint64(C.transaction_fees(C.transaction_t(tx)))
+	return uint64(C.chain_transaction_fees(C.transaction_t(tx)))
 }
 
-func transactionSignatureOperations(tx unsafe.Pointer) uint64 /*size_t*/ {
-	return uint64(C.transaction_signature_operations(C.transaction_t(tx)))
+func transactionSignatureOperations(tx unsafe.Pointer) uint64 {
+	return uint64(C.chain_transaction_signature_operations(C.transaction_t(tx)))
 }
 
-func transactionSignatureOperationsBip16Active(tx unsafe.Pointer, bip16Active bool) uint64 /*size_t*/ {
-	return uint64(C.transaction_signature_operations_bip16_active(C.transaction_t(tx), boolToC(bip16Active)))
+func transactionSignatureOperationsBip16Active(tx unsafe.Pointer, bip16Active bool) uint64 {
+	return uint64(C.chain_transaction_signature_operations_bip16_active(C.transaction_t(tx), boolToC(bip16Active)))
 }
 
 func transactionTotalInputValue(tx unsafe.Pointer) uint64 {
-	return uint64(C.transaction_total_input_value(C.transaction_t(tx)))
+	return uint64(C.chain_transaction_total_input_value(C.transaction_t(tx)))
 }
 
 func transactionTotalOutputValue(tx unsafe.Pointer) uint64 {
-	return uint64(C.transaction_total_output_value(C.transaction_t(tx)))
+	return uint64(C.chain_transaction_total_output_value(C.transaction_t(tx)))
 }
 
 func transactionIsCoinbase(tx unsafe.Pointer) bool {
-	return CToBool(C.transaction_is_coinbase(C.transaction_t(tx)))
+	return CToBool(C.chain_transaction_is_coinbase(C.transaction_t(tx)))
 }
 
 func transactionIsNullNonCoinbase(tx unsafe.Pointer) bool {
-	return CToBool(C.transaction_is_null_non_coinbase(C.transaction_t(tx)))
+	return CToBool(C.chain_transaction_is_null_non_coinbase(C.transaction_t(tx)))
 }
 
 func transactionIsOversizedCoinbase(tx unsafe.Pointer) bool {
-	return CToBool(C.transaction_is_oversized_coinbase(C.transaction_t(tx)))
+	return CToBool(C.chain_transaction_is_oversized_coinbase(C.transaction_t(tx)))
 }
 
-func transactionIsImmature(tx unsafe.Pointer, targetHeight uint64 /*size_t*/) bool {
-	return CToBool(C.transaction_is_immature(C.transaction_t(tx), C.size_t(targetHeight)))
+func transactionIsMature(tx unsafe.Pointer, targetHeight uint64) bool {
+	return CToBool(C.chain_transaction_is_mature(C.transaction_t(tx), C.uint64_t(targetHeight)))
 }
 
 func transactionIsOverspent(tx unsafe.Pointer) bool {
-	return CToBool(C.transaction_is_overspent(C.transaction_t(tx)))
+	return CToBool(C.chain_transaction_is_overspent(C.transaction_t(tx)))
 }
 
 func transactionIsDoubleSpend(tx unsafe.Pointer, includeUnconfirmed bool) bool {
-	return CToBool(C.transaction_is_double_spend(C.transaction_t(tx), boolToC(includeUnconfirmed)))
+	return CToBool(C.chain_transaction_is_double_spend(C.transaction_t(tx), boolToC(includeUnconfirmed)))
 }
 
 func transactionIsMissingPreviousOutputs(tx unsafe.Pointer) bool {
-	return CToBool(C.transaction_is_missing_previous_outputs(C.transaction_t(tx)))
+	return CToBool(C.chain_transaction_is_missing_previous_outputs(C.transaction_t(tx)))
 }
 
-func transactionIsFinal(tx unsafe.Pointer, blockHeight uint64 /*size_t*/, blockTime uint32) bool {
-	return CToBool(C.transaction_is_final(C.transaction_t(tx), C.size_t(blockHeight), C.uint32_t(blockTime)))
+func transactionIsFinal(tx unsafe.Pointer, blockHeight uint64, blockTime uint32) bool {
+	return CToBool(C.chain_transaction_is_final(C.transaction_t(tx), C.uint64_t(blockHeight), C.uint32_t(blockTime)))
 }
 
 func transactionIsLocktimeConflict(tx unsafe.Pointer) bool {
-	return CToBool(C.transaction_is_locktime_conflict(C.transaction_t(tx)))
+	return CToBool(C.chain_transaction_is_locktime_conflict(C.transaction_t(tx)))
+}
+
+func transactionOutputs(transaction unsafe.Pointer) unsafe.Pointer {
+	return unsafe.Pointer(C.chain_transaction_outputs(C.transaction_t(transaction)))
+}
+
+func transactionInputs(transaction unsafe.Pointer) unsafe.Pointer {
+	return unsafe.Pointer(C.chain_transaction_inputs(C.transaction_t(transaction)))
 }
 
 // --------------------------------------
 
-func transactionOutputCount(transaction unsafe.Pointer) int {
-	return (int)(C.transaction_output_count(C.transaction_t(transaction)))
-}
+//TODO(bitprim): implement the following functions using the new API
+// func transactionOutputCount(transaction unsafe.Pointer) int {
+// 	return (int)(C.chain_transaction_output_count(C.transaction_t(transaction)))
+// }
 
-func transactionOutputNth(transaction unsafe.Pointer, n int) unsafe.Pointer {
-	res := C.transaction_output_nth(C.transaction_t(transaction), C.size_t(n))
-	return unsafe.Pointer(res)
-}
+// func transactionOutputNth(transaction unsafe.Pointer, n int) unsafe.Pointer {
+// 	res := C.chain_transaction_output_nth(C.transaction_t(transaction), C.size_t(n))
+// 	return unsafe.Pointer(res)
+// }
 
-func transactionInputCount(transaction unsafe.Pointer) int {
-	return (int)(C.transaction_input_count(C.transaction_t(transaction)))
-}
+// func transactionInputCount(transaction unsafe.Pointer) int {
+// 	return (int)(C.chain_transaction_input_count(C.transaction_t(transaction)))
+// }
 
-func transactionInputNth(transaction unsafe.Pointer, n int) unsafe.Pointer {
-	res := C.transaction_input_nth(C.transaction_t(transaction), C.size_t(n))
-	return unsafe.Pointer(res)
-}
+// func transactionInputNth(transaction unsafe.Pointer, n int) unsafe.Pointer {
+// 	res := C.chain_transaction_input_nth(C.transaction_t(transaction), C.size_t(n))
+// 	return unsafe.Pointer(res)
+// }

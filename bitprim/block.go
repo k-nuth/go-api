@@ -74,12 +74,12 @@ func (x Block) Transactions() []Transaction {
 	//return res
 }
 
-func (x Block) SerializedSize(version uint32) uint64 /*size_t*/ {
+func (x Block) SerializedSize(version uint32) uint64 {
 	return blockSerializedSize(x.ptr, version)
 }
 
 /*static*/
-func (x Block) Subsidy(height uint64 /*size_t*/) uint64 {
+func (x Block) Subsidy(height uint64) uint64 {
 	return blockSubsidy(height)
 }
 
@@ -99,15 +99,15 @@ func (x Block) GenerateMerkleRoot(block unsafe.Pointer) HashT {
 	return blockGenerateMerkleRoot(x.ptr)
 }
 
-func (x Block) SignatureOperations() uint64 /*size_t*/ {
+func (x Block) SignatureOperations() uint64 {
 	return blockSignatureOperations(x.ptr)
 }
 
-func (x Block) SignatureOperationsBip16Active(bip16_active bool) uint64 /*size_t*/ {
+func (x Block) SignatureOperationsBip16Active(bip16_active bool) uint64 {
 	return blockSignatureOperationsBip16Active(x.ptr, bip16_active)
 }
 
-func (x Block) TotalInputs(with_coinbase bool) uint64 /*size_t*/ {
+func (x Block) TotalInputs(with_coinbase bool) uint64 {
 	return blockTotalInputs(x.ptr, with_coinbase)
 }
 
@@ -115,19 +115,19 @@ func (x Block) IsExtraCoinbases(block unsafe.Pointer) bool {
 	return blockIsExtraCoinbases(x.ptr)
 }
 
-func (x Block) IsFinal(height uint64 /*size_t*/) bool {
-	return blockIsFinal(x.ptr, height)
+func (x Block) IsFinal(height uint64, block_time uint32) bool {
+	return blockIsFinal(x.ptr, height, block_time)
 }
 
 func (x Block) IsDistinctTransactionSet(block unsafe.Pointer) bool {
 	return blockIsDistinctTransactionSet(x.ptr)
 }
 
-func (x Block) IsValidCoinbaseClaim(height uint64 /*size_t*/) bool {
+func (x Block) IsValidCoinbaseClaim(height uint64) bool {
 	return blockIsValidCoinbaseClaim(x.ptr, height)
 }
 
-func (x Block) IsValidCoinbaseScript(height uint64 /*size_t*/) bool {
+func (x Block) IsValidCoinbaseScript(height uint64) bool {
 	return blockIsValidCoinbaseScript(x.ptr, height)
 }
 
