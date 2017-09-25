@@ -31,6 +31,7 @@ package bitprim
 import "C"
 
 import (
+	"fmt"
 	"unsafe"
 )
 
@@ -62,10 +63,17 @@ import (
 // --------------------------------
 
 func GetLastHeight(chain unsafe.Pointer) (int, int) {
+	fmt.Println("GetLastHeight - 1")
 	ptr := (C.chain_t)(chain)
 
+	fmt.Println("GetLastHeight - 2")
+
 	var outHeight C.uint64_t
+	fmt.Println("GetLastHeight - 3")
+
 	res := C.chain_get_last_height(ptr, &outHeight)
+	fmt.Println("GetLastHeight - 4")
+
 	return int(res), int(outHeight)
 }
 

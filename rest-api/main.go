@@ -50,7 +50,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func startHttpServer(e *bitprim.Executor) *http.Server {
+func startHttpServer(c *bitprim.Chain) *http.Server {
 
 	router := mux.NewRouter().StrictSlash(true)
 
@@ -60,9 +60,11 @@ func startHttpServer(e *bitprim.Executor) *http.Server {
 
 	// http://127.0.0.1:8088/last-height
 	router.HandleFunc("/last-height", func(w http.ResponseWriter, r *http.Request) {
-		// fmt.Println("Called last-height")
+		fmt.Println("Called last-height")
 
-		_, height := e.GetLastHeight()
+		_, height := c.GetLastHeight()
+
+		fmt.Println("Called last-height AFTER")
 
 		// fmt.Printf("Last Height %d\n", height)
 		fmt.Fprintf(w, "Last Height: %d\n", height)
@@ -91,7 +93,7 @@ func startHttpServer(e *bitprim.Executor) *http.Server {
 		// fmt.Fprintln(w, "history:", paymentAddress)
 		// fmt.Println("history:", paymentAddress)
 
-		list := e.GetHistoryExpanded(paymentAddress, 0, 0)
+		list := c.GetHistoryExpanded(paymentAddress, 0, 0)
 		transfers := bitprim.ToJsonStruct(list)
 		json.MarshalIndent(transfers, "", "    ")
 		json.NewEncoder(w).Encode(transfers)
@@ -110,8 +112,8 @@ func startHttpServer(e *bitprim.Executor) *http.Server {
 
 func main() {
 
-	// e := bitprim.NewExecutor("/pepe")
-	e := bitprim.NewExecutorWithStd("/pepe")
+	e := bitprim.NewExecutor("/pepe")
+	// e := bitprim.NewExecutorWithStd("/pepe")
 	// defer e.Close()
 
 	res := e.Initchain()
@@ -129,7 +131,7 @@ func main() {
 		return
 	}
 
-	srv := startHttpServer(e)
+	srv := startHttpServer(e.Chain())
 
 	// running := true
 

@@ -125,6 +125,12 @@ func ExecutorInitchain(exec unsafe.Pointer) int {
 	return int(res)
 }
 
+func ExecutorChain(exec unsafe.Pointer) unsafe.Pointer {
+	ptr := (*C.struct_executor)(exec)
+	res := C.executor_get_chain(ptr)
+	return unsafe.Pointer(res)
+}
+
 // // --------------------------------
 // // GetLastHeight
 // // --------------------------------
